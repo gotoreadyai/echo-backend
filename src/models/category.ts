@@ -1,5 +1,5 @@
-import { DataTypes, Model, Optional } from 'sequelize';
-import sequelize from '../db';
+import { DataTypes, Model, Optional } from "sequelize";
+import sequelize from "../db";
 
 interface CategoryAttributes {
   id: string;
@@ -7,9 +7,13 @@ interface CategoryAttributes {
   parentId: string | null;
 }
 
-interface CategoryCreationAttributes extends Optional<CategoryAttributes, 'id' | 'parentId'> {}
+interface CategoryCreationAttributes
+  extends Optional<CategoryAttributes, "id" | "parentId"> {}
 
-class Category extends Model<CategoryAttributes, CategoryCreationAttributes> implements CategoryAttributes {
+class Category
+  extends Model<CategoryAttributes, CategoryCreationAttributes>
+  implements CategoryAttributes
+{
   public id!: string;
   public name!: string;
   public parentId!: string | null;
@@ -33,8 +37,8 @@ Category.init(
   },
   {
     sequelize,
-    modelName: 'Category',
-    tableName: 'Categories'  // Określenie nazwy tabeli
+    modelName: "Category",
+    tableName: "Categories", 
   }
 );
 
