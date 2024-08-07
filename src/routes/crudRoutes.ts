@@ -1,9 +1,9 @@
-import express from 'express';
+import express, { Router } from 'express';
 import { Model, ModelStatic } from 'sequelize';
 import * as crudController from '../controllers/crudController';
 
 const createCrudRoutes = <T extends Model>(model: ModelStatic<T>, modelName: string) => {
-  const router = express.Router();
+  const router:Router = express.Router();
 
   router.get(`/${modelName}s`, crudController.getAll(model, modelName));
   router.get(`/${modelName}/:id`, crudController.getOne(model, modelName));
