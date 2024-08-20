@@ -1,6 +1,6 @@
 # BlockBoxCRUD-Service
 
-The Schema Generation Application is a tool that generates a schema based on the models in your code. The schema is written in JS Modules format and can be used for documentation or integration with other tools.
+The Sequelize Schema Generation Application is a tool that generates a schema based on the models in your code. The schema is written in JS Modules format and can be used for documentation or integration with other tools.
 
 ## Installation
 
