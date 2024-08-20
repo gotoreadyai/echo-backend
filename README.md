@@ -1,6 +1,6 @@
 # BlockBoxCRUD-Service
 
-The Schema Generation Application is a tool that generates a schema based on the models in your code. The schema is written in JSON format and can be used for documentation or integration with other tools.
+The Schema Generation Application is a tool that generates a schema based on the models in your code. The schema is written in JS Modules format and can be used for documentation or integration with other tools.
 
 ## Installation
 
@@ -22,13 +22,13 @@ export { Workspace };
 
 ### Migrations
 
-To generate the models schema, run the following command:
+To generate the migrations, run the following command:
 
 ```
-npm run generate:schema
+npm run generate:migrations
 ```
 
-The models schema will be written to the `models.ts` file in the `const export_path` directory.
+The migrations will be written as sequelize migrations CLI format.
 
 ### Models schema
 
