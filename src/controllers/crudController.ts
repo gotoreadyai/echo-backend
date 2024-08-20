@@ -1,11 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import * as crudService from '../services/crudService';
 import { Model, ModelStatic } from 'sequelize';
+import pluralize from 'pluralize';
 
 export const getAll = <T extends Model>(model: ModelStatic<T>, modelName: string) => async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
+    const pluralizedName = pluralize(modelName);
     const items = await crudService.findAll(model);
-    res.json({ [`${modelName}s`]: items });
+    res.json({ [`${pluralizedName}`]: items });
   } catch (err) {
     next(err);
   }

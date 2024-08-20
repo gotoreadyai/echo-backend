@@ -1,3 +1,7 @@
 node_modules
+plugins
+config
+migrations
+seeders
 .env
 generatedSchema.json
