@@ -13,20 +13,29 @@ The Schema Generation Application is a tool that generates a schema based on the
 To configure the application, you need to create a `models.js` file in the `src/models` directory. In this file, you need to import the models that you want to include in the schema. For example:
 
 ```javascript
-const { Document, Category, DocumentCategory, ... } = require('./models');
+import Workspace from "./workspace";
 
-module.exports = { Document, Category, DocumentCategory, ... };
+export { Workspace };
 ```
 
 ## Running
 
-To generate the schema, run the following command:
+To generate the models schema, run the following command:
 
 ```
-npm run generate-schema
+npm run generate:schema
 ```
 
-The schema will be written to the `schema.json` file in the `dist` directory.
+The models schema will be written to the `models.ts` file in the `const export_path` directory.
+
+To generate the models schema, run the following command:
+
+```
+npm run generate:schema
+```
+
+The models schema will be written to the `models.ts` file in the `const export_path` directory.
+
 
 ## Documentation
 
