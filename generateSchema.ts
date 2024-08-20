@@ -8,6 +8,7 @@ import sequelize from "./src/db";
 
 // Inicjalizacja pustego obiektu na modele
 const export_path = "../backoffice-service/models_EXPORT";
+
 const models: { [key: string]: any } = {};
 const migrationsDir = path.join(__dirname, "migrations");
 const modelsDir = path.join(__dirname, export_path);

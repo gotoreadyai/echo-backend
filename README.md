@@ -20,13 +20,7 @@ export { Workspace };
 
 ## Running
 
-To generate the models schema, run the following command:
-
-```
-npm run generate:schema
-```
-
-The models schema will be written to the `models.ts` file in the `const export_path` directory.
+### Migrations
 
 To generate the models schema, run the following command:
 
@@ -35,6 +29,17 @@ npm run generate:schema
 ```
 
 The models schema will be written to the `models.ts` file in the `const export_path` directory.
+
+### Models schema
+
+To generate the models schema, run the following command:
+
+```
+npm run generate:schema
+```
+
+The models schema will be written to the `models.ts` file in the `const export_path` directory.
+Models was generated from migrations.
 
 
 ## Documentation
