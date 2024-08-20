@@ -1,57 +1,74 @@
-# BlockBoxCRUD-Service
+# Sequelize CRUD-Service
 
-The Sequelize Schema Generation Application is a tool that generates a schema based on the models in your code. The schema is written in JS Modules format and can be used for documentation or integration with other tools.
+**Sequelize CRUD-Service** helps you generate Sequelize schemas from models, making your integration easier.
+
+## Features
+
+- **Schema Generation:** Automatically create schemas from Sequelize models.
+- **Migrations:** Quickly generate Sequelize migrations.
+- **Modular:** Easily manage which models to include.
+- **Plugins:** Extend functionality with plugins.
 
 ## Installation
 
-1. Clone the repository: `git clone https://github.com/YourLastName/schema-generation-application.git`
-2. Navigate to the project directory: `cd schema-generation-application`
-3. Install dependencies: `npm install`
+1. **Clone the Repo:**
 
-## Configuration
+   ```bash
+   git clone https://github.com/YourLastName/schema-generation-application.git
+   ```
 
-To configure the application, you need to create a `models.js` file in the `src/models` directory. In this file, you need to import the models that you want to include in the schema. For example:
+2. **Go to Project Directory:**
+
+   ```bash
+   cd schema-generation-application
+   ```
+
+3. **Install Dependencies:**
+
+   ```bash
+   npm install
+   ```
+
+## Setup
+
+Create a `models.js` file in `src/models` to list the models you want to include:
 
 ```javascript
+// src/models/models.js
+
 import Workspace from "./workspace";
 
 export { Workspace };
 ```
 
-## Running
+## Usage
 
-### Migrations
+### Generate Migrations
 
-To generate the migrations, run the following command:
+Run this command to create Sequelize migrations:
 
-```
+```bash
 npm run generate:migrations
 ```
 
-The migrations will be written as sequelize migrations CLI format.
+### Generate Schema
 
-### Models schema
+Run this command to create the models schema:
 
-To generate the models schema, run the following command:
-
-```
+```bash
 npm run generate:schema
 ```
 
-The models schema will be written to the `models.ts` file in the `const export_path` directory.
-Models was generated from migrations.
+The schema will be saved as `models.ts` in the `const export_path` directory.
 
 ## Plugins
 
-To extend backend application use the plugins logic
-
-## Documentation
-
-The documentation for the application is located in the `README.md` file in the root directory.
+Use plugins to add more features to your backend. Check the `plugins` directory for details.
 
 ## Author
 
-* Last Name: Durtan
-* Email: dadmor@gmail.com
+- **Last Name:** Durtan
+- **Email:** dadmor@gmail.com
 
-I hope this helps! If you have any further questions, feel free to ask.
+Got questions? Email me!
+

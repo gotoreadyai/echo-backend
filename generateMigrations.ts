@@ -1,28 +1,30 @@
-import fs from 'fs';
-import path from 'path';
-import { Sequelize, DataTypes, DataType } from 'sequelize';
+import fs from "fs";
+import path from "path";
+import { Sequelize, DataTypes, DataType } from "sequelize";
 
 // Pobranie ścieżki z argumentów, lub użycie domyślnej
-const modelsPath = path.resolve(process.argv[2] || path.join(__dirname, 'src', 'models'));
-const migrationsPath = path.resolve(__dirname, 'migrations');
+const modelsPath = path.resolve(
+  process.argv[2] || path.join(__dirname, "src", "models")
+);
+const migrationsPath = path.resolve(__dirname, "migrations");
 
 // Funkcja do konwersji typu z Sequelize na typ w SQL
 function mapSequelizeTypeToSQL(type: DataType): string {
   if (type instanceof DataTypes.UUID) {
-    return 'UUID';
+    return "UUID";
   } else if (type instanceof DataTypes.STRING) {
     const length = (type as any).options?.length || 255;
     return `STRING(${length})`;
   } else if (type instanceof DataTypes.TEXT) {
-    return 'TEXT';
+    return "TEXT";
   } else if (type instanceof DataTypes.DATE) {
-    return 'DATE';
+    return "DATE";
   } else if (type instanceof DataTypes.ENUM) {
     const values = (type as any).options?.values;
     if (!values) {
-      throw new Error('ENUM type requires values');
+      throw new Error("ENUM type requires values");
     }
-    const sqlValues = values.map((v: string) => `'${v}'`).join(', ');
+    const sqlValues = values.map((v: string) => `'${v}'`).join(", ");
     return `ENUM(${sqlValues})`;
   } else {
     throw new Error(`Nieobsługiwany typ: ${type.constructor.name}`);
@@ -43,19 +45,19 @@ module.exports = {
 
   for (const [key, attribute] of Object.entries(attributes)) {
     const sqlType = mapSequelizeTypeToSQL(attribute.type);
-    let allowNull = attribute.allowNull === false ? 'false' : 'true';
+    let allowNull = attribute.allowNull === false ? "false" : "true";
 
-    if (key === 'id') {
-      allowNull = 'false';
+    if (key === "id") {
+      allowNull = "false";
     }
 
     const defaultValue = attribute.defaultValue
       ? `, defaultValue: Sequelize.${attribute.defaultValue}`
-      : '';
-    const primaryKey = attribute.primaryKey ? ', primaryKey: true' : '';
+      : "";
+    const primaryKey = attribute.primaryKey ? ", primaryKey: true" : "";
 
     // Obsługa kluczy obcych (foreign keys)
-    let references = '';
+    let references = "";
     if (attribute.references) {
       references = `,
         references: {
@@ -91,12 +93,26 @@ module.exports = {
 `;
 
   const migrationFileName = `${Date.now()}-create-${tableName}.js`;
-  fs.writeFileSync(path.join(migrationsPath, migrationFileName), migrationContent);
+  fs.writeFileSync(
+    path.join(migrationsPath, migrationFileName),
+    migrationContent
+  );
   console.log(`Generated migration for ${modelFile} -> ${migrationFileName}`);
 }
 
 // Przetwarzanie wszystkich modeli w katalogu, z pominięciem index.ts
-const models = fs.readdirSync(modelsPath)
-  .filter((file: string) => (file.endsWith('.js') || file.endsWith('.ts')) && file !== 'index.ts');
+// const models = fs.readdirSync(modelsPath)
+//   .filter((file: string) => (file.endsWith('.js') || file.endsWith('.ts')) && file !== 'index.ts');
+// models.forEach(generateMigrationForModel);
 
+const fileContent = fs.readFileSync(modelsPath + "/index.ts", "utf-8");
+const models = fileContent
+  .split("\n")
+  .filter((line) => line.startsWith("import"))
+  .map((line) => {
+    const parts = line.split("from");
+    const filename = parts[0].replace("import", "").trim() + ".ts";
+
+    return filename.charAt(0).toLowerCase() + filename.slice(1);
+  });
 models.forEach(generateMigrationForModel);
