@@ -60,3 +60,19 @@ export const deleteOne = <T extends Model>(model: ModelStatic<T>, modelName: str
     next(err); 
   }
 };
+
+// Nowa metoda kontrolera: getAllByForeignKey
+export const getAllByForeignKey = <T extends Model>(
+  model: ModelStatic<T>, 
+  modelName: string, 
+  foreignKey: keyof T
+) => async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const foreignKeyValue = req.params[foreignKey as string];
+    const pluralizedName = pluralize(modelName);
+    const items = await crudService.findAllByForeignKey(model, foreignKey, foreignKeyValue);
+    res.json({ [`${pluralizedName}`]: items });
+  } catch (err) {
+    next(err);
+  }
+};

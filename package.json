@@ -7,7 +7,9 @@
     "build": "tsc",
     "start": "node dist/app.js",
     "dev": "ts-node src/app.ts",
-    "schema": "ts-node generateSchema.ts"
+    "generate:schema": "ts-node generateSchema.ts",
+    "generate:migrations": "ts-node generateMigrations.ts",
+    "generate:migrations:custom": "node generateMigrations.js <customModelsPath>"
   },
   "dependencies": {
     "@types/express": "^4.17.21",

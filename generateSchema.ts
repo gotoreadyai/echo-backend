@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { Sequelize } from "sequelize";
+import pluralize from "pluralize";
 
 // Importuj instancję Sequelize z pliku `db.js`
 import sequelize from "./src/db";
@@ -93,10 +94,22 @@ export const ${tableName} = {
   }
 
   // Zapisz listę eksportów w models.ts
-  const modelsFileContent = `
-${modelExports.join("\n")}
-export const models = ${JSON.stringify(Object.keys(models), null, 2)};
-`;
+  let modelsFileContent: string = ``;
+  Object.keys(models).map((tableName) => {
+    modelsFileContent += `import { ${tableName} } from "./${tableName}";\n`;
+  });
+  modelsFileContent += `\nexport const ModelData: { [key: string]: any } = {\n`;
+  Object.keys(models).map((tableName) => {
+    modelsFileContent += `  ${tableName.charAt(0).toLowerCase() + tableName.slice(1)}: ${tableName},\n`;
+  });
+  modelsFileContent += `}`;
+
+  modelsFileContent += `\nexport const ModelSingular : { [key: string]: string } = {\n`;
+  Object.keys(models).map((tableName) => {
+    const lower = tableName.charAt(0).toLowerCase() + tableName.slice(1);
+    modelsFileContent += `  ${lower}: "${pluralize.singular(lower)}",\n`;
+  });
+  modelsFileContent += `}`;
   fs.writeFileSync(modelsFilePath, modelsFileContent, "utf8");
 }
 

@@ -8,13 +8,15 @@ import pluralize from "pluralize";
  * on a given model. It takes in a model and a model name as parameters and
  * returns a router.
  *
- * @param model - a Sequelize model
- * @param modelName - a string representing the name of the model
- * @return a router object for CRUD operations on the model
+ * @param model 
+ * @param modelName 
+ * @return 
  */
 const createCrudRoutes = <T extends Model>(
   model: ModelStatic<T>,
-  modelName: string
+  modelName: string,
+  foreignKey?: keyof T, 
+  relatedModelName?: string 
 ) => {
   const router: Router = express.Router();
   const pluralizedName = pluralize(modelName);
@@ -26,9 +28,6 @@ const createCrudRoutes = <T extends Model>(
   console.log(`PUT:/${modelName}/:id`);
   console.log(`DELETE:/${modelName}/:id`);
 
-
-  
-
   router.get(`/${pluralizedName}`, crudController.getAll(model, modelName));
   router.get(`/${modelName}/:id`, crudController.getOne(model, modelName));
   router.post(`/${modelName}`, crudController.createOne(model, modelName));
@@ -37,6 +36,16 @@ const createCrudRoutes = <T extends Model>(
     `/${modelName}/:id`,
     crudController.deleteOne(model, modelName)
   );
+
+ 
+  if (foreignKey && relatedModelName) {
+    const relatedPluralizedName = pluralize(relatedModelName);
+    console.log(`GET:/${relatedModelName}/:id/${pluralizedName}`);
+    router.get(
+      `/${relatedModelName}/:id/${pluralizedName}`,
+      crudController.getAllByForeignKey(model, modelName, foreignKey)
+    );
+  }
 
   return router;
 };
