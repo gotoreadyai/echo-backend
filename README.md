@@ -41,6 +41,9 @@ npm run generate:schema
 The models schema will be written to the `models.ts` file in the `const export_path` directory.
 Models was generated from migrations.
 
+## Plugins
+
+To extend backend application use the plugins logic
 
 ## Documentation
 
