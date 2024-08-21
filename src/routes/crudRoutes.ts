@@ -50,9 +50,6 @@ const createCrudRoutes = <T extends Model>(
     crudController.deleteOne(model, modelName)
   );
 
- 
-  
-
   return router;
 };
 
