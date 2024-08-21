@@ -22,30 +22,36 @@ const createCrudRoutes = <T extends Model>(
   const pluralizedName = pluralize(modelName);
 
   console.log(`-------------------------`);
+  
   console.log(`GET:/${pluralizedName}`);
-  console.log(`GET:/${modelName}/:id`);
-  console.log(`POST:/${modelName}`);
-  console.log(`PUT:/${modelName}/:id`);
-  console.log(`DELETE:/${modelName}/:id`);
-
   router.get(`/${pluralizedName}`, crudController.getAll(model, modelName));
+  
+  if (foreignKey && relatedModelName) {
+    console.log(`GET:/${pluralizedName}/${relatedModelName}/:id`);
+    const relatedPluralizedName = pluralize(relatedModelName);
+    router.get(
+      `/${pluralizedName}/${relatedModelName}/:id`,
+      crudController.getAllByForeignKey(model, modelName, foreignKey)
+    );
+  }
+
+  console.log(`GET:/${modelName}/:id`);
   router.get(`/${modelName}/:id`, crudController.getOne(model, modelName));
+
+  console.log(`POST:/${modelName}`);
   router.post(`/${modelName}`, crudController.createOne(model, modelName));
+
+  console.log(`PUT:/${modelName}/:id`);
   router.put(`/${modelName}/:id`, crudController.updateOne(model, modelName));
+  
+  console.log(`DELETE:/${modelName}/:id`);
   router.delete(
     `/${modelName}/:id`,
     crudController.deleteOne(model, modelName)
   );
 
  
-  if (foreignKey && relatedModelName) {
-    const relatedPluralizedName = pluralize(relatedModelName);
-    console.log(`GET:/${relatedModelName}/:id/${pluralizedName}`);
-    router.get(
-      `/${relatedModelName}/:id/${pluralizedName}`,
-      crudController.getAllByForeignKey(model, modelName, foreignKey)
-    );
-  }
+  
 
   return router;
 };

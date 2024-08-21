@@ -13,6 +13,21 @@ export const getAll = <T extends Model>(model: ModelStatic<T>, modelName: string
   }
 };
 
+export const getAllByForeignKey = <T extends Model>(
+  model: ModelStatic<T>, 
+  modelName: string, 
+  foreignKey: keyof T
+) => async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {    
+    const foreignKeyValue = req.params.id;
+    const pluralizedName = pluralize(modelName);
+    const items = await crudService.findAllByForeignKey(model, foreignKey, foreignKeyValue);
+    res.json({ [`${pluralizedName}`]: items });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const getOne = <T extends Model>(model: ModelStatic<T>, modelName: string) => async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const item = await crudService.findOne(model, req.params.id);
@@ -61,18 +76,4 @@ export const deleteOne = <T extends Model>(model: ModelStatic<T>, modelName: str
   }
 };
 
-// Nowa metoda kontrolera: getAllByForeignKey
-export const getAllByForeignKey = <T extends Model>(
-  model: ModelStatic<T>, 
-  modelName: string, 
-  foreignKey: keyof T
-) => async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  try {
-    const foreignKeyValue = req.params[foreignKey as string];
-    const pluralizedName = pluralize(modelName);
-    const items = await crudService.findAllByForeignKey(model, foreignKey, foreignKeyValue);
-    res.json({ [`${pluralizedName}`]: items });
-  } catch (err) {
-    next(err);
-  }
-};
+
