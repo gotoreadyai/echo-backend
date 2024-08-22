@@ -34,17 +34,18 @@ Document.init(
       allowNull: false,
     },
     content: {
-      type: DataTypes.TEXT,
+      type: DataTypes.JSONB,
+      defaultValue: {},
       allowNull: false,
     },
     workspaceId: {
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: 'Workspaces', // Nazwa tabeli do której odnosi się klucz obcy
-        key: 'id',
+        model: "Workspaces", // Nazwa tabeli do której odnosi się klucz obcy
+        key: "id",
       },
-      onDelete: 'CASCADE', // Opcjonalnie: co zrobić, gdy workspace jest usuwany
+      onDelete: "CASCADE", // Opcjonalnie: co zrobić, gdy workspace jest usuwany
     },
   },
   {
@@ -56,5 +57,7 @@ Document.init(
 // Poprawione relacje
 Workspace.hasMany(Document, { foreignKey: "workspaceId" });
 Document.belongsTo(Workspace, { foreignKey: "workspaceId" });
+
+
 
 export default Document;
