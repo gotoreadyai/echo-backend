@@ -1,18 +1,19 @@
 import { Request, Response, NextFunction, RequestHandler } from 'express';
 import jwt from 'jsonwebtoken';
+import User from '../models/user'; // Import modelu użytkownika
 
 interface TokenPayload {
-  id: number;
+  id: string;
   email: string;
   iat?: number;
   exp?: number;
 }
 
-interface RequestWithUser extends Request {
-  user: { id: number; email: string };
+export interface RequestWithUser extends Request {
+  user: { id: string; email: string; role: string }; // Dodajemy pole `role`
 }
 
-export const verifyToken: RequestHandler = (
+export const verifyToken: RequestHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -26,8 +27,14 @@ export const verifyToken: RequestHandler = (
     const secret = process.env.JWT_SECRET!;
     const decoded = jwt.verify(token, secret) as TokenPayload;
 
-    // Dodajemy `user` do `req` za pomocą Type Assertion
-    (req as RequestWithUser).user = { id: decoded.id, email: decoded.email };
+    // Znajdź użytkownika na podstawie ID z tokenu
+    const user = await User.findByPk(decoded.id);
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid token' });
+    }
+
+    // Dodajemy `user` do `req` z rolą użytkownika
+    (req as RequestWithUser).user = { id: user.id, email: user.email, role: user.role };
 
     next();
   } catch (error) {

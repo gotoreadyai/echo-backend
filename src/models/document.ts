@@ -1,12 +1,14 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../db";
 import Workspace from "./workspace";
+import User from "./user";
 
 interface DocumentAttributes {
   id: string;
   title: string;
   content: string;
   workspaceId: string;
+  ownerId: string; 
 }
 
 interface DocumentCreationAttributes
@@ -20,6 +22,7 @@ class Document
   public title!: string;
   public content!: string;
   public workspaceId!: string;
+  public ownerId!: string; 
 }
 
 Document.init(
@@ -47,12 +50,20 @@ Document.init(
       },
       onDelete: "CASCADE", // Opcjonalnie: co zrobić, gdy workspace jest usuwany
     },
+    ownerId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    
   },
   {
     sequelize,
     modelName: "Document",
   }
 );
+
+// Relacja z modelem User
+Document.belongsTo(User, { foreignKey: 'ownerId', as: 'owner' });
 
 // Poprawione relacje
 Workspace.hasMany(Document, { foreignKey: "workspaceId" });

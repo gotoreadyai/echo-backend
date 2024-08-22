@@ -5,7 +5,7 @@ interface UserAttributes {
   id: string;
   email: string;
   password: string;
-  role: "teacher" | "student" | "admin"; // Możesz dodać więcej ról w zależności od potrzeb
+  role: "user" | "teacher" | "student" | "admin"; // Możesz dodać więcej ról w zależności od potrzeb
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -20,7 +20,7 @@ class User
   public id!: string;
   public email!: string;
   public password!: string;
-  public role!: "teacher" | "student" | "admin"; // Możesz dodać się, które ról jest poprawny/ Domyślna rola użytkownika
+  public role!: "user" | "teacher" | "student" | "admin"; // Możesz dodać się, które ról jest poprawny/ Domyślna rola użytkownika
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -46,7 +46,7 @@ User.init(
       allowNull: false,
     },
     role: {
-      type: DataTypes.ENUM("teacher", "student", "admin"),
+      type: DataTypes.ENUM("user", "teacher", "student", "admin"),
       allowNull: false,
       defaultValue: "student",
     },
