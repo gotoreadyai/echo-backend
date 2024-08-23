@@ -2,13 +2,13 @@ import fs from "fs";
 import path from "path";
 import { Sequelize, DataTypes, DataType } from "sequelize";
 
-// Pobranie ścieżki z argumentów, lub użycie domyślnej
+// Get the models path from arguments or use the default
 const modelsPath = path.resolve(
   process.argv[2] || path.join(__dirname, "src", "models")
 );
 const migrationsPath = path.resolve(__dirname, "migrations");
 
-// Funkcja do konwersji typu z Sequelize na typ w SQL
+// Function to map Sequelize types to SQL types
 function mapSequelizeTypeToSQL(type: DataType): string {
   if (type instanceof DataTypes.UUID) {
     return "UUID";
@@ -17,6 +17,8 @@ function mapSequelizeTypeToSQL(type: DataType): string {
     return `STRING(${length})`;
   } else if (type instanceof DataTypes.TEXT) {
     return "TEXT";
+  } else if (type instanceof DataTypes.JSONB) {
+    return "JSONB";
   } else if (type instanceof DataTypes.DATE) {
     return "DATE";
   } else if (type instanceof DataTypes.ENUM) {
@@ -27,11 +29,11 @@ function mapSequelizeTypeToSQL(type: DataType): string {
     const sqlValues = values.map((v: string) => `'${v}'`).join(", ");
     return `ENUM(${sqlValues})`;
   } else {
-    throw new Error(`Nieobsługiwany typ: ${type.constructor.name}`);
+    throw new Error(`Unsupported type: ${type.constructor.name}`);
   }
 }
 
-// Generowanie migracji na podstawie modeli
+// Generate migration for a model
 function generateMigrationForModel(modelFile: string): void {
   const model = require(path.join(modelsPath, modelFile)).default;
   const tableName = model.getTableName();
@@ -47,16 +49,31 @@ module.exports = {
     const sqlType = mapSequelizeTypeToSQL(attribute.type);
     let allowNull = attribute.allowNull === false ? "false" : "true";
 
+    // Handle the `id` field with `UUIDV4`
+    let defaultValue = "";
     if (key === "id") {
       allowNull = "false";
+      defaultValue = `, defaultValue: Sequelize.UUIDV4`;
+    } else if (attribute.defaultValue !== undefined) {
+      if (typeof attribute.defaultValue === "object" && attribute.defaultValue.constructor.name === "SequelizeMethod") {
+        defaultValue = `, defaultValue: ${attribute.defaultValue.toString()}`;
+      } else if (typeof attribute.defaultValue === "string") {
+        defaultValue = `, defaultValue: '${attribute.defaultValue}'`;
+      } else if (typeof attribute.defaultValue === "number") {
+        defaultValue = `, defaultValue: ${attribute.defaultValue}`;
+      } else if (attribute.defaultValue === null) {
+        defaultValue = `, defaultValue: null`;
+      } else if (typeof attribute.defaultValue === "object") {
+        defaultValue = `, defaultValue: ${JSON.stringify(attribute.defaultValue)}`;
+      }
     }
 
-    const defaultValue = attribute.defaultValue
-      ? `, defaultValue: Sequelize.${attribute.defaultValue}`
-      : "";
     const primaryKey = attribute.primaryKey ? ", primaryKey: true" : "";
 
-    // Obsługa kluczy obcych (foreign keys)
+    // Handle unique constraint
+    const unique = attribute.unique ? ", unique: true" : "";
+
+    // Handle foreign keys
     let references = "";
     if (attribute.references) {
       references = `,
@@ -78,7 +95,7 @@ module.exports = {
 
     migrationContent += `      ${key}: {
         type: Sequelize.${sqlType},
-        allowNull: ${allowNull}${defaultValue}${primaryKey}${references}
+        allowNull: ${allowNull}${defaultValue}${primaryKey}${unique}${references}
       },
 `;
   }
@@ -100,7 +117,7 @@ module.exports = {
   console.log(`Generated migration for ${modelFile} -> ${migrationFileName}`);
 }
 
-// Przetwarzanie wszystkich modeli w katalogu, z pominięciem index.ts
+// Processing all models in the directory, skipping index.ts
 // const models = fs.readdirSync(modelsPath)
 //   .filter((file: string) => (file.endsWith('.js') || file.endsWith('.ts')) && file !== 'index.ts');
 // models.forEach(generateMigrationForModel);

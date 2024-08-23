@@ -8,7 +8,7 @@ interface DocumentAttributes {
   title: string;
   content: string;
   workspaceId: string;
-  ownerId: string; 
+  ownerId: string;
 }
 
 interface DocumentCreationAttributes
@@ -22,7 +22,7 @@ class Document
   public title!: string;
   public content!: string;
   public workspaceId!: string;
-  public ownerId!: string; 
+  public ownerId!: string;
 }
 
 Document.init(
@@ -54,7 +54,6 @@ Document.init(
       type: DataTypes.UUID,
       allowNull: false,
     },
-    
   },
   {
     sequelize,
@@ -63,12 +62,10 @@ Document.init(
 );
 
 // Relacja z modelem User
-Document.belongsTo(User, { foreignKey: 'ownerId', as: 'owner' });
+Document.belongsTo(User, { foreignKey: "ownerId", as: "owner" });
 
 // Poprawione relacje
 Workspace.hasMany(Document, { foreignKey: "workspaceId" });
 Document.belongsTo(Workspace, { foreignKey: "workspaceId" });
-
-
 
 export default Document;

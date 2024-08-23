@@ -4,6 +4,7 @@ import * as crudController from "../controllers/crudController";
 import pluralize from "pluralize";
 import { verifyToken } from "../middleware/verifyToken";
 import { verifyOwnership } from "../middleware/ownership";
+import { log } from "../middleware/messagees";
 
 const createCrudRoutes = <T extends Model>(
   model: ModelStatic<T>,
@@ -14,13 +15,14 @@ const createCrudRoutes = <T extends Model>(
   const router: Router = express.Router();
   const pluralizedName = pluralize(modelName);
 
-  console.log(`-------------------------`);
-  
-  console.log(`GET:/${pluralizedName}`);
+
+  log('CRUD',`gray-bg`)
+
+  log(`GET:/${pluralizedName}`, 'blue');
   router.get(`/${pluralizedName}`, crudController.getAll(model, modelName));
   
   if (foreignKey && relatedModelName) {
-    console.log(`GET:/${pluralizedName}/${relatedModelName}/:id`);
+    log(`GET:/${pluralizedName}/${relatedModelName}/:id`, 'blue');
     const relatedPluralizedName = pluralize(relatedModelName);
     router.get(
       `/${pluralizedName}/${relatedModelName}/:id`,
@@ -28,13 +30,13 @@ const createCrudRoutes = <T extends Model>(
     );
   }
 
-  console.log(`GET:/${modelName}/:id`);
+  log(`GET:/${modelName}/:id`, 'blue');
   router.get(`/${modelName}/:id`, crudController.getOne(model, modelName));
 
-  console.log(`POST:/${modelName}`);
+  log(`POST:/${modelName}`, 'green');
   router.post(`/${modelName}`, verifyToken, crudController.createOne(model, modelName));
 
-  console.log(`PUT:/${modelName}/:id`);
+  log(`PUT:/${modelName}/:id`, 'yellow');
   router.put(
     `/${modelName}/:id`,
     verifyToken,
@@ -42,7 +44,7 @@ const createCrudRoutes = <T extends Model>(
     crudController.updateOne(model, modelName)
   );
   
-  console.log(`DELETE:/${modelName}/:id`);
+  log(`DELETE:/${modelName}/:id`, 'red');
   router.delete(
     `/${modelName}/:id`,
     verifyToken,
