@@ -35,7 +35,7 @@ const messagees_1 = require("../middleware/messagees");
 const createCrudRoutes = (model, modelName, foreignKey, relatedModelName) => {
     const router = express_1.default.Router();
     const pluralizedName = (0, pluralize_1.default)(modelName);
-    (0, messagees_1.log)('CRUD', `gray-bg`);
+    (0, messagees_1.log)(`CRUD ${pluralizedName}`, `gray-bg`);
     (0, messagees_1.log)(`GET:/${pluralizedName}`, 'blue');
     router.get(`/${pluralizedName}`, crudController.getAll(model, modelName));
     if (foreignKey && relatedModelName) {

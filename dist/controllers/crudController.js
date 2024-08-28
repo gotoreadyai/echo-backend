@@ -78,7 +78,6 @@ const getOne = (model, modelName) => (req, res, next) => __awaiter(void 0, void 
 exports.getOne = getOne;
 const createOne = (model, modelName) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // Rzutowanie `req` na `RequestWithUser`, aby uzyskać dostęp do `user`
         const userReq = req;
         const newItem = yield model.create(Object.assign(Object.assign({}, req.body), { ownerId: userReq.user.id }));
         res.status(201).json(newItem);
@@ -104,10 +103,11 @@ const updateOne = (model, modelName) => (req, res, next) => __awaiter(void 0, vo
 });
 exports.updateOne = updateOne;
 const deleteOne = (model, modelName) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("delete", model, req.params.id);
     try {
         const deletedCount = yield crudService.remove(model, req.params.id);
         if (deletedCount > 0) {
-            res.status(204).send();
+            res.status(200).json({ [modelName]: req.params.id });
         }
         else {
             res.status(404).send(`${modelName} not found`);

@@ -2,6 +2,7 @@ import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../db";
 import Workspace from "./workspace";
 import User from "./user";
+import { generateUniqueSlug } from "../utils/slugGenerator";
 
 interface DocumentAttributes {
   id: string;
@@ -9,6 +10,7 @@ interface DocumentAttributes {
   content: Record<string, any>;
   workspaceId: string;
   ownerId: string;
+  slug: string;
 }
 
 interface DocumentCreationAttributes
@@ -23,6 +25,7 @@ class Document
   public content!: Record<string, any>;
   public workspaceId!: string;
   public ownerId!: string;
+  public slug!: string;
 }
 
 Document.init(
@@ -36,6 +39,11 @@ Document.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    slug: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
     content: {
       type: DataTypes.JSONB,
       defaultValue: {},
@@ -45,10 +53,10 @@ Document.init(
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: "Workspaces", // Nazwa tabeli do której odnosi się klucz obcy
+        model: "Workspaces",
         key: "id",
       },
-      onDelete: "CASCADE", // Opcjonalnie: co zrobić, gdy workspace jest usuwany
+      onDelete: "CASCADE",
     },
     ownerId: {
       type: DataTypes.UUID,
@@ -58,6 +66,15 @@ Document.init(
   {
     sequelize,
     modelName: "Document",
+    hooks: {
+      beforeCreate: async (document: Document) => {
+        document.slug = await generateUniqueSlug(
+          Document,
+          document.title,
+          document.id
+        );
+      },
+    },
   }
 );
 
@@ -65,7 +82,7 @@ Document.init(
 Document.belongsTo(User, { foreignKey: "ownerId", as: "owner" });
 
 // Poprawione relacje
-Workspace.hasMany(Document, { foreignKey: "workspaceId" });
 Document.belongsTo(Workspace, { foreignKey: "workspaceId" });
+Workspace.hasMany(Document, { foreignKey: "workspaceId" });
 
 export default Document;
