@@ -21,6 +21,14 @@ User.init({
             isEmail: true,
         },
     },
+    firstName: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true,
+    },
+    lastName: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true,
+    },
     password: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
@@ -28,7 +36,7 @@ User.init({
     role: {
         type: sequelize_1.DataTypes.ENUM("user", "teacher", "student", "admin"),
         allowNull: false,
-        defaultValue: "student",
+        defaultValue: "user",
     },
 }, {
     sequelize: db_1.default,

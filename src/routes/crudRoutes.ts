@@ -16,7 +16,7 @@ const createCrudRoutes = <T extends Model>(
   const pluralizedName = pluralize(modelName);
 
 
-  log('CRUD',`gray-bg`)
+  log(`CRUD ${pluralizedName}`,`gray-bg`)
 
   log(`GET:/${pluralizedName}`, 'blue');
   router.get(`/${pluralizedName}`, crudController.getAll(model, modelName));

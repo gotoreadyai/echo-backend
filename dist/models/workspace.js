@@ -16,7 +16,12 @@ Workspace.init({
     title: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
-    }
+    },
+    content: {
+        type: sequelize_1.DataTypes.JSONB,
+        defaultValue: {},
+        allowNull: false,
+    },
 }, {
     sequelize: db_1.default,
     modelName: 'Workspace',

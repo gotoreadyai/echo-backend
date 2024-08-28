@@ -52,15 +52,16 @@ export const getOne =
     }
   };
 
-  export const createOne = <T extends Model>(model: ModelStatic<T>, modelName: string) => async (req: Request, res: Response): Promise<void> => {
+export const createOne =
+  <T extends Model>(model: ModelStatic<T>, modelName: string) =>
+  async (req: Request, res: Response): Promise<void> => {
     try {
-      // Rzutowanie `req` na `RequestWithUser`, aby uzyskać dostęp do `user`
       const userReq = req as RequestWithUser;
       const newItem = await model.create({
         ...req.body,
-        ownerId: userReq.user.id, // Przypisanie właściciela dokumentu
+        ownerId: userReq.user.id,
       });
-  
+
       res.status(201).json(newItem);
     } catch (error) {
       res.status(500).json({ error: `Failed to create ${modelName}` });
@@ -89,10 +90,12 @@ export const updateOne =
 export const deleteOne =
   <T extends Model>(model: ModelStatic<T>, modelName: string) =>
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    console.log("delete",model, req.params.id);
+
     try {
       const deletedCount = await crudService.remove(model, req.params.id);
       if (deletedCount > 0) {
-        res.status(204).send();
+        res.status(200).json({ [modelName]: req.params.id });
       } else {
         res.status(404).send(`${modelName} not found`);
       }

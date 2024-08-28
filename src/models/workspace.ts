@@ -1,10 +1,12 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../db';
+import User from './user';
 
 interface WorkspaceAttributes {
   id: string;
   title: string;
   content:Record<string, any>;
+  ownerId: string;
 }
 
 interface WorkspaceCreationAttributes extends Optional<WorkspaceAttributes, 'id'> {}
@@ -13,6 +15,7 @@ class Workspace extends Model<WorkspaceAttributes, WorkspaceCreationAttributes> 
   public id!: string;
   public title!: string;
   public content!: Record<string, any>;
+  public ownerId!: string;
 }
 
 Workspace.init(
@@ -31,11 +34,19 @@ Workspace.init(
       defaultValue: {},
       allowNull: false,
     },
+    ownerId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
   },
   {
     sequelize,
     modelName: 'Workspace',
   }
 );
+
+// Relacja z modelem User
+Workspace.belongsTo(User, { foreignKey: "ownerId", as: "owner" });
+
 
 export default Workspace;

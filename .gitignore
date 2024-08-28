@@ -4,4 +4,3 @@ config
 migrations
 seeders
 .env
-generatedSchema.json

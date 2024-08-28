@@ -6,7 +6,6 @@
 
 - **Schema Generation:** Automatically create schemas from Sequelize models.
 - **Migrations:** Quickly generate Sequelize migrations.
-- **Modular:** Easily manage which models to include.
 - **Plugins:** Extend functionality with plugins.
 
 ## Installation
