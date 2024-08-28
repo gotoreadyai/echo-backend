@@ -29,29 +29,28 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const crudController = __importStar(require("../controllers/crudController"));
 const pluralize_1 = __importDefault(require("pluralize"));
-/**
- * createCrudRoutes is a function that creates a router for CRUD operations
- * on a given model. It takes in a model and a model name as parameters and
- * returns a router.
- *
- * @param model - a Sequelize model
- * @param modelName - a string representing the name of the model
- * @return a router object for CRUD operations on the model
- */
-const createCrudRoutes = (model, modelName) => {
+const verifyToken_1 = require("../middleware/verifyToken");
+const ownership_1 = require("../middleware/ownership");
+const messagees_1 = require("../middleware/messagees");
+const createCrudRoutes = (model, modelName, foreignKey, relatedModelName) => {
     const router = express_1.default.Router();
     const pluralizedName = (0, pluralize_1.default)(modelName);
-    console.log(`-------------------------`);
-    console.log(`GET:/${pluralizedName}`);
-    console.log(`GET:/${modelName}/:id`);
-    console.log(`POST:/${modelName}`);
-    console.log(`PUT:/${modelName}/:id`);
-    console.log(`DELETE:/${modelName}/:id`);
+    (0, messagees_1.log)('CRUD', `gray-bg`);
+    (0, messagees_1.log)(`GET:/${pluralizedName}`, 'blue');
     router.get(`/${pluralizedName}`, crudController.getAll(model, modelName));
+    if (foreignKey && relatedModelName) {
+        (0, messagees_1.log)(`GET:/${pluralizedName}/${relatedModelName}/:id`, 'blue');
+        const relatedPluralizedName = (0, pluralize_1.default)(relatedModelName);
+        router.get(`/${pluralizedName}/${relatedModelName}/:id`, crudController.getAllByForeignKey(model, modelName, foreignKey));
+    }
+    (0, messagees_1.log)(`GET:/${modelName}/:id`, 'blue');
     router.get(`/${modelName}/:id`, crudController.getOne(model, modelName));
-    router.post(`/${modelName}`, crudController.createOne(model, modelName));
-    router.put(`/${modelName}/:id`, crudController.updateOne(model, modelName));
-    router.delete(`/${modelName}/:id`, crudController.deleteOne(model, modelName));
+    (0, messagees_1.log)(`POST:/${modelName}`, 'green');
+    router.post(`/${modelName}`, verifyToken_1.verifyToken, crudController.createOne(model, modelName));
+    (0, messagees_1.log)(`PUT:/${modelName}/:id`, 'yellow');
+    router.put(`/${modelName}/:id`, verifyToken_1.verifyToken, ownership_1.verifyOwnership, crudController.updateOne(model, modelName));
+    (0, messagees_1.log)(`DELETE:/${modelName}/:id`, 'red');
+    router.delete(`/${modelName}/:id`, verifyToken_1.verifyToken, ownership_1.verifyOwnership, crudController.deleteOne(model, modelName));
     return router;
 };
 exports.default = createCrudRoutes;

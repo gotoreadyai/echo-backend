@@ -9,11 +9,37 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.remove = exports.update = exports.create = exports.findOne = exports.findAll = void 0;
-const findAll = (model, options) => __awaiter(void 0, void 0, void 0, function* () {
-    return (yield model.findAll(options));
+exports.remove = exports.update = exports.create = exports.findOne = exports.findAllByForeignKey = exports.findAll = void 0;
+const findAll = (model, options, page, pageSize) => __awaiter(void 0, void 0, void 0, function* () {
+    const limit = pageSize || 10; // Domyślny rozmiar strony
+    const offset = page ? (page - 1) * limit : 0;
+    const findOptions = Object.assign(Object.assign({}, options), { limit,
+        offset });
+    const { rows, count } = yield model.findAndCountAll(findOptions);
+    return {
+        items: rows,
+        totalItems: count,
+        totalPages: Math.ceil(count / limit),
+        currentPage: page || 1,
+    };
 });
 exports.findAll = findAll;
+const findAllByForeignKey = (model, foreignKey, foreignKeyValue, options, page, pageSize) => __awaiter(void 0, void 0, void 0, function* () {
+    const limit = pageSize || 10; // Domyślny rozmiar strony
+    const offset = page ? (page - 1) * limit : 0;
+    const where = Object.assign({ [foreignKey]: foreignKeyValue }, ((options === null || options === void 0 ? void 0 : options.where) || {}));
+    const findOptions = Object.assign(Object.assign({}, options), { where,
+        limit,
+        offset });
+    const { rows, count } = yield model.findAndCountAll(findOptions);
+    return {
+        items: rows,
+        totalItems: count,
+        totalPages: Math.ceil(count / limit),
+        currentPage: page || 1,
+    };
+});
+exports.findAllByForeignKey = findAllByForeignKey;
 const findOne = (model, id) => __awaiter(void 0, void 0, void 0, function* () {
     return (yield model.findByPk(id));
 });
@@ -27,9 +53,8 @@ const update = (model, id, data) => __awaiter(void 0, void 0, void 0, function* 
         where: { id },
         returning: true,
     };
-    const res = yield model.update(data, options);
-    /* jakaś miazga tutaj jest z typami */
-    return [0, {}];
+    const [affectedCount, affectedRows = null] = yield model.update(data, options);
+    return [affectedCount, affectedRows];
 });
 exports.update = update;
 const remove = (model, id) => __awaiter(void 0, void 0, void 0, function* () {

@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteOne = exports.updateOne = exports.createOne = exports.getOne = exports.getAll = void 0;
+exports.deleteOne = exports.updateOne = exports.createOne = exports.getOne = exports.getAllByForeignKey = exports.getAll = void 0;
 const crudService = __importStar(require("../services/crudService"));
 const pluralize_1 = __importDefault(require("pluralize"));
 const getAll = (model, modelName) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -49,6 +49,18 @@ const getAll = (model, modelName) => (req, res, next) => __awaiter(void 0, void 
     }
 });
 exports.getAll = getAll;
+const getAllByForeignKey = (model, modelName, foreignKey) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const foreignKeyValue = req.params.id;
+        const pluralizedName = (0, pluralize_1.default)(modelName);
+        const items = yield crudService.findAllByForeignKey(model, foreignKey, foreignKeyValue);
+        res.json({ [`${pluralizedName}`]: items });
+    }
+    catch (err) {
+        next(err);
+    }
+});
+exports.getAllByForeignKey = getAllByForeignKey;
 const getOne = (model, modelName) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const item = yield crudService.findOne(model, req.params.id);
@@ -64,13 +76,15 @@ const getOne = (model, modelName) => (req, res, next) => __awaiter(void 0, void 
     }
 });
 exports.getOne = getOne;
-const createOne = (model, modelName) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const createOne = (model, modelName) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const newItem = yield crudService.create(model, req.body);
-        res.status(201).json({ [modelName]: newItem });
+        // Rzutowanie `req` na `RequestWithUser`, aby uzyskać dostęp do `user`
+        const userReq = req;
+        const newItem = yield model.create(Object.assign(Object.assign({}, req.body), { ownerId: userReq.user.id }));
+        res.status(201).json(newItem);
     }
-    catch (err) {
-        next(err);
+    catch (error) {
+        res.status(500).json({ error: `Failed to create ${modelName}` });
     }
 });
 exports.createOne = createOne;

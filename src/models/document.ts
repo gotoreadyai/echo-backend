@@ -6,7 +6,7 @@ import User from "./user";
 interface DocumentAttributes {
   id: string;
   title: string;
-  content: string;
+  content: Record<string, any>;
   workspaceId: string;
   ownerId: string;
 }
@@ -20,7 +20,7 @@ class Document
 {
   public id!: string;
   public title!: string;
-  public content!: string;
+  public content!: Record<string, any>;
   public workspaceId!: string;
   public ownerId!: string;
 }
