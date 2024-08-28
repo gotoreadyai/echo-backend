@@ -5,8 +5,8 @@ interface UserAttributes {
   id: string;
   email: string;
   password: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   role: "user" | "teacher" | "student" | "admin"; 
   createdAt?: Date;
   updatedAt?: Date;
