@@ -1,14 +1,20 @@
 import { Request, Response, NextFunction } from "express";
 
 export const errorHandler = (
-  err: any,
+  error: any,
   _req: Request,
   res: Response,
   _next: NextFunction
 ): void => {
-  console.error(err.stack);
-  if (err.message) {
-    res.status(500).json({ error: err.message });
+  if (error.message) {
+    res.status(500).json({
+      error: error.message,
+      details: error instanceof Error ? error.message : "Unknown error",
+      fullError: error,
+    });
+  } else {
+    res
+      .status(500)
+      .json({ error: "Something went wrong! - check server logs" });
   }
-  res.status(500).json({ error: "Something went wrong! - check server logs" });
 };

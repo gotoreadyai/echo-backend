@@ -40,6 +40,7 @@ Workspace.init(
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
+      defaultValue: "",
     },
     content: {
       type: DataTypes.JSONB,

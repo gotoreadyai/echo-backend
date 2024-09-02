@@ -52,25 +52,40 @@ export const getOne =
     }
   };
 
-export const createOne =
+  export const getOneBySlug =
   <T extends Model>(model: ModelStatic<T>, modelName: string) =>
-  async (req: Request, res: Response): Promise<void> => {
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const item = await crudService.findOneBySlug(model, req.params.slug);
+      if (item) {
+        res.json({ [modelName]: item });
+      } else {
+        res.status(404).send(`${modelName} not found`);
+      }
+    } catch (err) {
+      next(err);
+    }
+  };
+
+export const createOne =
+  <T extends Model>(model: ModelStatic<T>) =>
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userReq = req as RequestWithUser;
       const newItem = await model.create({
         ...req.body,
         ownerId: userReq.user.id,
       });
-
       res.status(201).json(newItem);
-    } catch (error) {
-      res.status(500).json({ error: `Failed to create ${modelName}` });
+    } catch (err) {
+      next(err);
     }
   };
 
 export const updateOne =
   <T extends Model>(model: ModelStatic<T>, modelName: string) =>
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    console.log("updateOne", model, req.params.id);
     try {
       const [updatedCount, updatedItems] = await crudService.update(
         model,
@@ -87,11 +102,29 @@ export const updateOne =
     }
   };
 
+  export const updateOneBySlug =
+  <T extends Model>(model: ModelStatic<T>, modelName: string) =>
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const [updatedCount, updatedItems] = await crudService.updateBySlug(
+        model,
+        req.params.slug,
+        req.body
+      );
+      if (updatedCount > 0 && updatedItems) {
+        res.json({ [modelName]: updatedItems[0] });
+      } else {
+        res.status(404).send(`${modelName} not found`);
+      }
+    } catch (err) {
+      next(err);
+    }
+  };
+
+
 export const deleteOne =
   <T extends Model>(model: ModelStatic<T>, modelName: string) =>
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    console.log("delete",model, req.params.id);
-
     try {
       const deletedCount = await crudService.remove(model, req.params.id);
       if (deletedCount > 0) {

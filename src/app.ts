@@ -14,11 +14,13 @@ const cors = require("cors");
 app.use(cors());
 
 app.use(express.json());
-app.use(createCrudRoutes(Workspace, "workspace"));
-app.use(createCrudRoutes(Document, "document", "workspaceId", "workspace"));
+app.use(createCrudRoutes(Workspace, "workspace", undefined, undefined, true));
+app.use(
+  createCrudRoutes(Document, "document", "workspaceId", "workspace", true)
+);
 app.use(createCrudRoutes(Category, "category"));
-app.use(createCrudRoutes(User, "users"));
-app.use(createCrudRoutes(File, "files"));
+app.use(createCrudRoutes(User, "user"));
+app.use(createCrudRoutes(File, "file"));
 
 app.use(filterByCategoryRoutes);
 app.use(schoolBooksCascade);

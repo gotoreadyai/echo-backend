@@ -9,20 +9,16 @@ import { log } from "../middleware/messagees";
 const createCrudRoutes = <T extends Model>(
   model: ModelStatic<T>,
   modelName: string,
-  foreignKey?: keyof T, 
-  relatedModelName?: string 
+  foreignKey?: keyof T,
+  relatedModelName?: string,
+  hasSlug?: boolean // Optional flag to indicate if the model uses slugs
 ) => {
   const router: Router = express.Router();
   const pluralizedName = pluralize(modelName);
 
-
-  log(`CRUD ${pluralizedName}`,`gray-bg`)
-
-  log(`GET:/${pluralizedName}`, 'blue');
   router.get(`/${pluralizedName}`, crudController.getAll(model, modelName));
-  
+
   if (foreignKey && relatedModelName) {
-    log(`GET:/${pluralizedName}/${relatedModelName}/:id`, 'blue');
     const relatedPluralizedName = pluralize(relatedModelName);
     router.get(
       `/${pluralizedName}/${relatedModelName}/:id`,
@@ -30,27 +26,52 @@ const createCrudRoutes = <T extends Model>(
     );
   }
 
-  log(`GET:/${modelName}/:id`, 'blue');
   router.get(`/${modelName}/:id`, crudController.getOne(model, modelName));
 
-  log(`POST:/${modelName}`, 'green');
-  router.post(`/${modelName}`, verifyToken, crudController.createOne(model, modelName));
+  hasSlug &&
+    router.get(
+      `/${modelName}/slug/:slug`,
+      crudController.getOneBySlug(model, modelName)
+    );
 
-  log(`PUT:/${modelName}/:id`, 'yellow');
+  hasSlug &&
+    router.put(
+      `/${modelName}/slug/:slug`,
+      verifyToken,
+      verifyOwnership(model),
+      crudController.updateOneBySlug(model, modelName)
+    );
+
+  
+
+  router.post(`/${modelName}`, verifyToken, crudController.createOne(model));
+
   router.put(
     `/${modelName}/:id`,
     verifyToken,
-    verifyOwnership, 
+    verifyOwnership(model),
     crudController.updateOne(model, modelName)
   );
-  
-  log(`DELETE:/${modelName}/:id`, 'red');
+
   router.delete(
     `/${modelName}/:id`,
     verifyToken,
-    verifyOwnership,
+    verifyOwnership(model),
     crudController.deleteOne(model, modelName)
   );
+
+
+  log(`CRUD ${pluralizedName}`, `gray-bg`);
+  log(`GET:/${pluralizedName}`, "blue");
+  log(`GET:/${modelName}/:id`, "blue");
+  foreignKey &&
+    relatedModelName &&
+    log(`GET:/${pluralizedName}/${relatedModelName}/:id`, "blue");
+  hasSlug && log(`GET:/${modelName}/slug/:slug`, "blue");
+  hasSlug && log(`PUT:/${modelName}/slug/:slug`, "yellow");
+  log(`POST:/${modelName}`, "green");
+  log(`PUT:/${modelName}/:id`, "yellow");
+  log(`DELETE:/${modelName}/:id`, "red");
 
   return router;
 };

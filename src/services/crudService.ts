@@ -5,6 +5,7 @@ import {
   UpdateOptions,
   DestroyOptions,
   WhereOptions,
+  Attributes,
 } from "sequelize";
 
 export const findAll = async <T extends Model>(
@@ -23,7 +24,6 @@ export const findAll = async <T extends Model>(
   };
 
   const { rows, count } = await model.findAndCountAll(findOptions);
-
   return {
     items: rows,
     totalItems: count,
@@ -61,7 +61,6 @@ export const findAllByForeignKey = async <T extends Model>(
   };
 
   const { rows, count } = await model.findAndCountAll(findOptions);
-
   return {
     items: rows,
     totalItems: count,
@@ -77,6 +76,15 @@ export const findOne = async <T extends Model>(
   return (await model.findByPk(id)) as T | null;
 };
 
+export const findOneBySlug = async <T extends Model>(
+  model: ModelStatic<T>,
+  slug: string
+): Promise<T | null> => {
+  return (await model.findOne({
+    where: { slug } as unknown as WhereOptions<Attributes<T>>,
+  })) as T | null;
+};
+
 
 export const create = async <T extends Model>(
   model: ModelStatic<T>,
@@ -89,7 +97,7 @@ export const update = async <T extends Model>(
   model: ModelStatic<T>,
   id: string,
   data: Partial<T["_creationAttributes"]>
-): Promise<[number, T[] | null]> => {
+): Promise<[number, T[] | null]> => {  
   const options: UpdateOptions = {
     where: { id },
     returning: true,
@@ -100,6 +108,23 @@ export const update = async <T extends Model>(
   );
   return [affectedCount, affectedRows as T[] | null];
 };
+
+export const updateBySlug = async <T extends Model>(
+  model: ModelStatic<T>,
+  slug: string,
+  data: Partial<T["_creationAttributes"]>
+): Promise<[number, T[] | null]> => {
+  const options: UpdateOptions = {
+    where: { slug } as unknown as WhereOptions<Attributes<T>>,
+    returning: true,
+  };
+  const [affectedCount, affectedRows = null] = await model.update(
+    data,
+    options
+  );
+  return [affectedCount, affectedRows as T[] | null];
+};
+
 
 export const remove = async <T extends Model>(
   model: ModelStatic<T>,

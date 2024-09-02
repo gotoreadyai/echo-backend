@@ -6,7 +6,14 @@ export async function generateUniqueSlug<T extends Model>(
   title: string,
   id?: string
 ): Promise<string> {
+  // Generowanie podstawowego sluga
   let slugBase = slugify(title, { lower: true });
+
+  // Ograniczenie długości podstawy sluga do 48 znaków
+  if (slugBase.length > 48) {
+    slugBase = slugBase.substring(0, 48);
+  }
+
   let slug = slugBase;
   let count = 1;
 
@@ -15,11 +22,14 @@ export async function generateUniqueSlug<T extends Model>(
   let existingEntry = await model.findOne({ where: whereClause });
 
   while (existingEntry && existingEntry.get("id") !== id) {
+    // Zwiększanie liczby przy końcu sluga dla unikalności
     slug = `${slugBase}-${count}`;
     whereClause.slug = slug;
     existingEntry = await model.findOne({ where: whereClause });
     count++;
   }
+
+  console.log(slug);
 
   return slug;
 }
