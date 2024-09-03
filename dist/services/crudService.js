@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.remove = exports.update = exports.create = exports.findOne = exports.findAllByForeignKey = exports.findAll = void 0;
+exports.remove = exports.updateBySlug = exports.update = exports.create = exports.findOneBySlug = exports.findOne = exports.findAllByForeignKey = exports.findAll = void 0;
 const findAll = (model, options, page, pageSize) => __awaiter(void 0, void 0, void 0, function* () {
     const limit = pageSize || 10; // Domyślny rozmiar strony
     const offset = page ? (page - 1) * limit : 0;
@@ -44,6 +44,12 @@ const findOne = (model, id) => __awaiter(void 0, void 0, void 0, function* () {
     return (yield model.findByPk(id));
 });
 exports.findOne = findOne;
+const findOneBySlug = (model, slug) => __awaiter(void 0, void 0, void 0, function* () {
+    return (yield model.findOne({
+        where: { slug },
+    }));
+});
+exports.findOneBySlug = findOneBySlug;
 const create = (model, data) => __awaiter(void 0, void 0, void 0, function* () {
     return (yield model.create(data));
 });
@@ -57,6 +63,15 @@ const update = (model, id, data) => __awaiter(void 0, void 0, void 0, function* 
     return [affectedCount, affectedRows];
 });
 exports.update = update;
+const updateBySlug = (model, slug, data) => __awaiter(void 0, void 0, void 0, function* () {
+    const options = {
+        where: { slug },
+        returning: true,
+    };
+    const [affectedCount, affectedRows = null] = yield model.update(data, options);
+    return [affectedCount, affectedRows];
+});
+exports.updateBySlug = updateBySlug;
 const remove = (model, id) => __awaiter(void 0, void 0, void 0, function* () {
     const options = {
         where: { id },

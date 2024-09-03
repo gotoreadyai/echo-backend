@@ -7,6 +7,6 @@ const log = (message, color) => {
     color === 'green' && console.log('\x1b[32m%s\x1b[0m', message);
     color === 'yellow' && console.log('\x1b[33m%s\x1b[0m', message);
     color === 'cyan' && console.log('\x1b[36m%s\x1b[0m', message);
-    color === 'gray-bg' && console.log(`\x1b[48;5;237m\x1b[38;5;250m${message}                     \x1b[0m`);
+    color === 'gray-bg' && console.log(`\x1b[48;5;237m\x1b[38;5;129m${message}                     \x1b[0m`);
 };
 exports.log = log;

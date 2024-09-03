@@ -52,7 +52,7 @@ export const getOne =
     }
   };
 
-  export const getOneBySlug =
+export const getOneBySlug =
   <T extends Model>(model: ModelStatic<T>, modelName: string) =>
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -102,7 +102,7 @@ export const updateOne =
     }
   };
 
-  export const updateOneBySlug =
+export const updateOneBySlug =
   <T extends Model>(model: ModelStatic<T>, modelName: string) =>
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -111,6 +111,53 @@ export const updateOne =
         req.params.slug,
         req.body
       );
+      if (updatedCount > 0 && updatedItems) {
+        res.json({ [modelName]: updatedItems[0] });
+      } else {
+        res.status(404).send(`${modelName} not found`);
+      }
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  interface Content {
+    [key: string]: any; // lub bardziej szczegółowe typy, np. string, number, itp.
+  }
+
+  export interface MyModel extends Model {
+    content: Content;
+  }
+
+  export const updateContentBySlug =
+  <T extends MyModel>(model: ModelStatic<T>, modelName: string) =>
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { key, value } = req.body;
+
+      if (!key || value === undefined) {
+        return res.status(400).send("Key and value are required");
+      }
+
+      // Pobierz aktualny element
+      const item = await crudService.findOneBySlug(model, req.params.slug);
+
+      if (!item) {
+        return res.status(404).send(`${modelName} not found`);
+      }
+
+      // Zaktualizuj tylko wybrany klucz w obiekcie content
+      const updatedContent = {
+        ...item.content,
+        [key]: value,
+      };
+
+      const [updatedCount, updatedItems] = await crudService.updateBySlug(
+        model,
+        req.params.slug,
+        { content: updatedContent }
+      );
+
       if (updatedCount > 0 && updatedItems) {
         res.json({ [modelName]: updatedItems[0] });
       } else {

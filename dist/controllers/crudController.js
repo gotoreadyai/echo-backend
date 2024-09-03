@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteOne = exports.updateOne = exports.createOne = exports.getOne = exports.getAllByForeignKey = exports.getAll = void 0;
+exports.deleteOne = exports.updateOneBySlug = exports.updateOne = exports.createOne = exports.getOneBySlug = exports.getOne = exports.getAllByForeignKey = exports.getAll = void 0;
 const crudService = __importStar(require("../services/crudService"));
 const pluralize_1 = __importDefault(require("pluralize"));
 const getAll = (model, modelName) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -76,18 +76,34 @@ const getOne = (model, modelName) => (req, res, next) => __awaiter(void 0, void 
     }
 });
 exports.getOne = getOne;
-const createOne = (model, modelName) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getOneBySlug = (model, modelName) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const item = yield crudService.findOneBySlug(model, req.params.slug);
+        if (item) {
+            res.json({ [modelName]: item });
+        }
+        else {
+            res.status(404).send(`${modelName} not found`);
+        }
+    }
+    catch (err) {
+        next(err);
+    }
+});
+exports.getOneBySlug = getOneBySlug;
+const createOne = (model) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userReq = req;
         const newItem = yield model.create(Object.assign(Object.assign({}, req.body), { ownerId: userReq.user.id }));
         res.status(201).json(newItem);
     }
-    catch (error) {
-        res.status(500).json({ error: `Failed to create ${modelName}` });
+    catch (err) {
+        next(err);
     }
 });
 exports.createOne = createOne;
 const updateOne = (model, modelName) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("updateOne", model, req.params.id);
     try {
         const [updatedCount, updatedItems] = yield crudService.update(model, req.params.id, req.body);
         if (updatedCount > 0 && updatedItems) {
@@ -102,8 +118,22 @@ const updateOne = (model, modelName) => (req, res, next) => __awaiter(void 0, vo
     }
 });
 exports.updateOne = updateOne;
+const updateOneBySlug = (model, modelName) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const [updatedCount, updatedItems] = yield crudService.updateBySlug(model, req.params.slug, req.body);
+        if (updatedCount > 0 && updatedItems) {
+            res.json({ [modelName]: updatedItems[0] });
+        }
+        else {
+            res.status(404).send(`${modelName} not found`);
+        }
+    }
+    catch (err) {
+        next(err);
+    }
+});
+exports.updateOneBySlug = updateOneBySlug;
 const deleteOne = (model, modelName) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("delete", model, req.params.id);
     try {
         const deletedCount = yield crudService.remove(model, req.params.id);
         if (deletedCount > 0) {
