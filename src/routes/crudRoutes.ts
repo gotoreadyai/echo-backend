@@ -5,9 +5,8 @@ import pluralize from "pluralize";
 import { verifyToken } from "../middleware/verifyToken";
 import { verifyOwnership } from "../middleware/ownership";
 import { log } from "../middleware/messagees";
-import { MyModel } from "../controllers/crudController";
 
-const createCrudRoutes = <T extends MyModel>(
+const createCrudRoutes = <T extends Model>(
   model: ModelStatic<T>,
   modelName: string,
   foreignKey?: keyof T,
@@ -43,12 +42,7 @@ const createCrudRoutes = <T extends MyModel>(
       crudController.updateOneBySlug(model, modelName)
     );
 
-    router.post(
-      `/${modelName}/slug/:slug/content`,
-      verifyToken,
-      verifyOwnership(model),
-      crudController.updateContentBySlug(model, modelName)
-    );
+  
 
   router.post(`/${modelName}`, verifyToken, crudController.createOne(model));
 
@@ -65,6 +59,7 @@ const createCrudRoutes = <T extends MyModel>(
     verifyOwnership(model),
     crudController.deleteOne(model, modelName)
   );
+
 
   log(`CRUD ${pluralizedName}`, `gray-bg`);
   log(`GET:/${pluralizedName}`, "blue");
