@@ -1,10 +1,14 @@
 import fs from "fs";
 import path from "path";
-import { Sequelize, DataTypes, DataType } from "sequelize";
+import {DataTypes, DataType } from "sequelize";
+
+
+console.log('xxxx',path.join(__dirname, "src", "models"));
 
 // Get the models path from arguments or use the default
+const param = process.argv[2];
 const modelsPath = path.resolve(
-  process.argv[2] || path.join(__dirname, "src", "models")
+  path.join(__dirname, "src","plugins",param, "models") || path.join(__dirname, "src", "models")
 );
 const migrationsPath = path.resolve(__dirname, "migrations");
 
@@ -109,7 +113,7 @@ module.exports = {
 };
 `;
 
-  const migrationFileName = `${Date.now()}-create-${tableName}.js`;
+  const migrationFileName = `${Date.now()}-create-${process.argv[2]}-${tableName}.js`;
   fs.writeFileSync(
     path.join(migrationsPath, migrationFileName),
     migrationContent

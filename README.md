@@ -1,6 +1,6 @@
-# Sequelize CRUD-Service
+# Echo BACKEND
 
-**Sequelize CRUD-Service** helps you generate Sequelize schemas from models, making your integration easier.
+**Echo BACKEND** helps you generate Sequelize schemas from models, making your integration easier.
 
 ## Features
 
