@@ -7,6 +7,7 @@ import { errorHandler } from "./middleware/errorHandler";
 import filterByCategoryRoutes from "./plugins/filterByCategory/Routes";
 import schoolBooksCascade from "./plugins/schoolBooksCascade/Routes";
 import JWTauth from "./plugins/JWTauth/Routes";
+import openAICall from "./plugins/openAI/Routes";
 import contentUpdateBySlug from "./plugins/contentUpdateBySlug/Routes";
 
 const app = express();
@@ -26,6 +27,7 @@ app.use(createCrudRoutes(File, "file"));
 app.use(filterByCategoryRoutes);
 app.use(schoolBooksCascade);
 app.use(JWTauth);
+app.use(openAICall);
 // app.use("/api", contentUpdateBySlug);
 app.use(contentUpdateBySlug);
 

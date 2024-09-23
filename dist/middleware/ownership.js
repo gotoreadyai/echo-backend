@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.verifyOwnership = void 0;
+exports.verifyOwnershipBySlug = exports.verifyOwnership = void 0;
 const verifyOwnership = (model) => {
     return (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         const resourceId = req.params.id;
@@ -35,3 +35,35 @@ const verifyOwnership = (model) => {
     });
 };
 exports.verifyOwnership = verifyOwnership;
+const verifyOwnershipBySlug = (model, slugField) => {
+    return (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        const slug = req.params.slug;
+        const userId = req.user.id;
+        const userRole = req.user.role;
+        try {
+            // Define the where condition using the proper typing
+            const whereCondition = {
+                [slugField]: slug,
+            };
+            // Find the resource by slug
+            const resource = yield model.findOne({ where: whereCondition });
+            if (!resource) {
+                return res.status(404).json({ error: `${model.name} not found` });
+            }
+            // Admin users have access to all resources
+            if (userRole === 'admin') {
+                return next();
+            }
+            // Check if the current user is the owner of the resource
+            const ownerId = resource.ownerId;
+            if (ownerId !== userId) {
+                return res.status(403).json({ error: `You are not the owner of this ${model.name.toLowerCase()}` });
+            }
+            next();
+        }
+        catch (error) {
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+    });
+};
+exports.verifyOwnershipBySlug = verifyOwnershipBySlug;

@@ -7,6 +7,7 @@ import {
   WhereOptions,
   Attributes,
 } from "sequelize";
+import { Workspace } from "../models";
 
 export const findAll = async <T extends Model>(
   model: ModelStatic<T>,
@@ -18,7 +19,8 @@ export const findAll = async <T extends Model>(
   const offset = page ? (page - 1) * limit : 0;
 
   const findOptions: FindOptions = {
-    ...options,
+    include: options?.include || [],
+    where: options?.where || {},
     limit,
     offset,
   };
@@ -29,8 +31,11 @@ export const findAll = async <T extends Model>(
     totalItems: count,
     totalPages: Math.ceil(count / limit),
     currentPage: page || 1,
+    
   };
 };
+
+
 
 export const findAllByForeignKey = async <T extends Model>(
   model: ModelStatic<T>,
@@ -81,9 +86,10 @@ export const findOneBySlug = async <T extends Model>(
   slug: string
 ): Promise<T | null> => {
   return (await model.findOne({
-    where: { slug } as unknown as WhereOptions<Attributes<T>>,
+    where: { slug } as any, // Alternatywnie, zdefiniuj interfejs lub typ dla modelu z polem 'slug'
   })) as T | null;
 };
+
 
 
 export const create = async <T extends Model>(

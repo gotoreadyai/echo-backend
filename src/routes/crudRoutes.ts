@@ -1,10 +1,13 @@
 import express, { Router } from "express";
-import { Model, ModelStatic } from "sequelize";
+import { Includeable, Model, ModelStatic } from "sequelize";
 import * as crudController from "../controllers/crudController";
 import pluralize from "pluralize";
 import { verifyToken } from "../middleware/verifyToken";
 import { verifyOwnership } from "../middleware/ownership";
 import { log } from "../middleware/messagees";
+import { Workspace } from "../models";
+
+type IncludeableOption = Includeable;
 
 const createCrudRoutes = <T extends Model>(
   model: ModelStatic<T>,
@@ -16,7 +19,22 @@ const createCrudRoutes = <T extends Model>(
   const router: Router = express.Router();
   const pluralizedName = pluralize(modelName);
 
-  router.get(`/${pluralizedName}`, crudController.getAll(model, modelName));
+  const allowedIncludes: IncludeableOption[] =
+  modelName.toLowerCase() === "document"
+    ? [
+        // Przykładowe dołączalne relacje
+        // { model: Category, as: "categories" },
+        // { model: File, as: "files" },
+        // { model: Document, as: "parent" },
+        { model: Workspace, as: "workspace" },
+      ]
+    : [];
+
+console.log(modelName.toLowerCase() === "document" && "---------dokumenty");
+
+  
+
+  router.get(`/${pluralizedName}`, crudController.getAll(model, modelName ));
 
   if (foreignKey && relatedModelName) {
     const relatedPluralizedName = pluralize(relatedModelName);

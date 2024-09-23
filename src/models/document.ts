@@ -86,3 +86,8 @@ Document.belongsTo(Workspace, { foreignKey: "workspaceId" });
 Workspace.hasMany(Document, { foreignKey: "workspaceId" });
 
 export default Document;
+
+
+export const include =  {
+  model: Workspace,
+}
