@@ -4,43 +4,10 @@ import {
   ModelStatic,
   UpdateOptions,
   DestroyOptions,
-  WhereOptions,
-  Attributes,
 } from "sequelize";
-import { Workspace } from "../models";
 
 export const findAll = async <T extends Model>(
   model: ModelStatic<T>,
-  options?: FindOptions,
-  page?: number,
-  pageSize?: number
-): Promise<{ items: T[], totalItems: number, totalPages: number, currentPage: number }> => {
-  const limit = pageSize || 10; // Domyślny rozmiar strony
-  const offset = page ? (page - 1) * limit : 0;
-
-  const findOptions: FindOptions = {
-    include: options?.include || [],
-    where: options?.where || {},
-    limit,
-    offset,
-  };
-
-  const { rows, count } = await model.findAndCountAll(findOptions);
-  return {
-    items: rows,
-    totalItems: count,
-    totalPages: Math.ceil(count / limit),
-    currentPage: page || 1,
-    
-  };
-};
-
-
-
-export const findAllByForeignKey = async <T extends Model>(
-  model: ModelStatic<T>,
-  foreignKey: keyof T,
-  foreignKeyValue: string,
   options?: FindOptions,
   page?: number,
   pageSize?: number
@@ -53,14 +20,9 @@ export const findAllByForeignKey = async <T extends Model>(
   const limit = pageSize || 10; // Domyślny rozmiar strony
   const offset = page ? (page - 1) * limit : 0;
 
-  const where: WhereOptions = {
-    [foreignKey]: foreignKeyValue,
-    ...(options?.where || {}),
-  };
-
   const findOptions: FindOptions = {
-    ...options,
-    where,
+    include: options?.include || [],
+    where: options?.where || {},
     limit,
     offset,
   };
@@ -81,17 +43,6 @@ export const findOne = async <T extends Model>(
   return (await model.findByPk(id)) as T | null;
 };
 
-export const findOneBySlug = async <T extends Model>(
-  model: ModelStatic<T>,
-  slug: string
-): Promise<T | null> => {
-  return (await model.findOne({
-    where: { slug } as any, // Alternatywnie, zdefiniuj interfejs lub typ dla modelu z polem 'slug'
-  })) as T | null;
-};
-
-
-
 export const create = async <T extends Model>(
   model: ModelStatic<T>,
   data: T["_creationAttributes"]
@@ -103,7 +54,7 @@ export const update = async <T extends Model>(
   model: ModelStatic<T>,
   id: string,
   data: Partial<T["_creationAttributes"]>
-): Promise<[number, T[] | null]> => {  
+): Promise<[number, T[] | null]> => {
   const options: UpdateOptions = {
     where: { id },
     returning: true,
@@ -114,23 +65,6 @@ export const update = async <T extends Model>(
   );
   return [affectedCount, affectedRows as T[] | null];
 };
-
-export const updateBySlug = async <T extends Model>(
-  model: ModelStatic<T>,
-  slug: string,
-  data: Partial<T["_creationAttributes"]>
-): Promise<[number, T[] | null]> => {
-  const options: UpdateOptions = {
-    where: { slug } as unknown as WhereOptions<Attributes<T>>,
-    returning: true,
-  };
-  const [affectedCount, affectedRows = null] = await model.update(
-    data,
-    options
-  );
-  return [affectedCount, affectedRows as T[] | null];
-};
-
 
 export const remove = async <T extends Model>(
   model: ModelStatic<T>,
