@@ -101,7 +101,9 @@ export const ${tableName} = {
   });
   modelsFileContent += `\nexport const ModelData: { [key: string]: any } = {\n`;
   Object.keys(models).map((tableName) => {
-    modelsFileContent += `  ${tableName.charAt(0).toLowerCase() + tableName.slice(1)}: ${tableName},\n`;
+    modelsFileContent += `  ${
+      tableName.charAt(0).toLowerCase() + tableName.slice(1)
+    }: ${tableName},\n`;
   });
   modelsFileContent += `}`;
 

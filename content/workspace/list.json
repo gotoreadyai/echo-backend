@@ -1,0 +1,79 @@
+{
+    "primaryContent": [
+        {
+            "id": "263f3298-a93f-4941-8bb3-8dac079bd50d",
+            "data": {
+                "actions": [
+                    {
+                        "scope": "workspaces",
+                        "action": "FetchItemsAction"
+                    }
+                ],
+                "repeater": [],
+                "reloadOnParamsChange": true
+            },
+            "filename": "ActionBlock"
+        }
+    ],
+    "tertiaryContent": [
+        {
+            "id": "ad088f95-3239-483b-9d4f-86e3ff38275f",
+            "data": {
+                "to": "/dashboard/workspace-create",
+                "name": "Utwórz nowy obszar roboczy",
+                "outline": true,
+                "className": "text-right text-info p-md"
+            },
+            "filename": "Link"
+        },
+        {
+            "id": "5b504d22-dca1-4648-b3c4-55eed7e10be7",
+            "data": {
+                "text": "Lista obszarów roboczych",
+                "actions": [],
+                "variant": "hero",
+                "repeater": [],
+                "className": "p-md"
+            },
+            "filename": "HeadingText"
+        },
+        {
+            "id": "2e0a181f-3bd3-458d-a90b-14dceca81efb",
+            "data": {
+                "url": "/dashboard/documents?document.workspaceId={id}&documents.where.workspaceId={id}",
+                "path": "workspaces.items",
+                "actions": [
+                    {
+                        "url": "/dashboard/workspace-edit/?workspace.id={id}",
+                        "icon": "edit"
+                    },
+                    {
+                        "url": "/dashboard/workspace-delete/?workspace.id={id}",
+                        "icon": "trash"
+                    }
+                ],
+                "repeater": [
+                    {
+                        "key": "title",
+                        "label": "Tytuł"
+                    },
+                    {
+                        "key": "slug",
+                        "label": "Odnośnik"
+                    }
+                ],
+                "className": "pb-lg",
+                "reloadOnParamsChange": false
+            },
+            "filename": "ListTableBlock"
+        },
+        {
+            "id": "a6eab681-6bc4-430c-813d-1da9353c2aed",
+            "data": {
+                "className": "p-sm flex justify-end"
+            },
+            "filename": "PaginationBlock"
+        }
+    ],
+    "secondaryContent": []
+}

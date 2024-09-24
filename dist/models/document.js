@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.include = void 0;
 const sequelize_1 = require("sequelize");
 const db_1 = __importDefault(require("../db"));
 const workspace_1 = __importDefault(require("./workspace"));
@@ -67,3 +68,6 @@ Document.belongsTo(user_1.default, { foreignKey: "ownerId", as: "owner" });
 Document.belongsTo(workspace_1.default, { foreignKey: "workspaceId" });
 workspace_1.default.hasMany(Document, { foreignKey: "workspaceId" });
 exports.default = Document;
+exports.include = {
+    model: workspace_1.default,
+};

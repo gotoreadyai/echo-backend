@@ -9,8 +9,8 @@
     "dev": "ts-node src/app.ts",
     "CLI": "ts-node CLI.ts",
     "generate:schema": "ts-node generateSchema.ts",
-    "generate:migrations": "ts-node generateMigrations.ts",
-    "generate:migrations:custom": "node generateMigrations.js <customModelsPath>"
+    "generate:migrations": "ts-node cli/generateMigrations.ts",
+    "generate:crud:seeders": "ts-node cli/generateCRUDSeeders.ts"
   },
   "dependencies": {
     "@types/express": "^4.17.21",

@@ -64,6 +64,26 @@ The schema will be saved as `models.ts` in the `const export_path` directory.
 
 Use plugins to add more features to your backend. Check the `plugins` directory for details.
 
+## :DevProcess restore
+
+```bash
+# turnoff al plugins
+...
+# undo all migrations or drop tables
+npx sequelize-cli db:migrate:undo:all
+...
+# clear mmigrations files
+...
+# create new starter migration files
+npm run generate:migrations
+
+npx sequelize-cli db:migrate
+npx sequelize-cli db:seed:all
+...
+# if undo:
+npx sequelize db:seed:undo
+...
+
 ## Author
 
 - **Last Name:** Durtan

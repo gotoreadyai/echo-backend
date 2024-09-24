@@ -1,0 +1,73 @@
+{
+    "primaryContent": [
+        {
+            "id": "5f8cf47b-a35e-4db8-959f-7096ea9522c9",
+            "data": {
+                "actions": [
+                    {
+                        "scope": "workspace",
+                        "action": "FetchItemAction"
+                    }
+                ],
+                "reloadOnParamsChange": true
+            },
+            "filename": "ActionBlock"
+        }
+    ],
+    "tertiaryContent": [
+        {
+            "id": "154bc46b-5392-41f4-8f85-c0c1dfae70d2",
+            "data": {
+                "to": "/dashboard/workspaces",
+                "name": "Powrót do obszarów roboczych",
+                "actions": [],
+                "className": "text-right text-info p-md",
+                "reloadOnParamsChange": false
+            },
+            "filename": "Link"
+        },
+        {
+            "id": "f74f3f9f-315b-4751-a2ed-0e1fdfee1299",
+            "data": {
+                "text": "Edycja obszaru roboczego",
+                "variant": "hero",
+                "className": "p-md"
+            },
+            "filename": "HeadingText"
+        },
+        {
+            "id": "ec68a90f-b850-4e76-9ede-d3114f87de92",
+            "data": {
+                "label": "Tytuł",
+                "className": "px-md pb-md",
+                "fieldName": "workspace.title"
+            },
+            "filename": "InputBlock"
+        },
+        {
+            "id": "b5a41eba-26b2-4f91-96af-6c2d8f99b393",
+            "data": {
+                "label": "Odnośnik",
+                "readonly": true,
+                "className": "px-md pb-md",
+                "fieldName": "workspace.slug"
+            },
+            "filename": "InputBlock"
+        },
+        {
+            "id": "1a9bb593-f5a5-4d53-a337-6e56090beabe",
+            "data": {
+                "actions": [
+                    {
+                        "scope": "workspace",
+                        "action": "UpdateAction"
+                    }
+                ],
+                "className": "px-md pb-md",
+                "successRedirect": "/dashboard/workspaces",
+                "reloadOnParamsChange": false
+            },
+            "filename": "SubmitForm"
+        }
+    ]
+}

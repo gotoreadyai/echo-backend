@@ -1,0 +1,58 @@
+{
+    "tertiaryContent": [
+        {
+            "id": "e5f44a19-28c2-45a2-9ee3-a939c3493d2b",
+            "data": {
+                "actions": [
+                    {
+                        "scope": "document",
+                        "action": "FetchItemAction"
+                    }
+                ],
+                "reloadOnParamsChange": true
+            },
+            "filename": "ActionBlock"
+        },
+        {
+            "id": "778684b6-ab11-4982-b040-06ead6c773d2",
+            "data": {
+                "text": "Usuwanie strony",
+                "className": "py-lg px-md font-semibold text-4xl text-right"
+            },
+            "filename": "HeadingText"
+        },
+        {
+            "id": "60856f64-8f45-4401-9965-edac285db33a",
+            "data": {
+                "label": "Tytuł",
+                "className": "pb-md",
+                "fieldName": "document.title"
+            },
+            "filename": "InputBlock"
+        },
+        {
+            "id": "811fa1d8-7010-4485-8891-e6c81c13f267",
+            "data": {
+                "label": "Identyfikator usuwanego elementu",
+                "className": "pb-md",
+                "fieldName": "document.id"
+            },
+            "filename": "InputBlock"
+        },
+        {
+            "id": "850e6ec0-0484-41e0-8ae5-5fb636582036",
+            "data": {
+                "actions": [
+                    {
+                        "scope": "document",
+                        "action": "DeleteAction"
+                    }
+                ],
+                "className": "",
+                "successRedirect": "/dashboard/documents/",
+                "reloadOnParamsChange": false
+            },
+            "filename": "SubmitForm"
+        }
+    ]
+}

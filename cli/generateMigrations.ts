@@ -1,16 +1,15 @@
 import fs from "fs";
 import path from "path";
-import {DataTypes, DataType } from "sequelize";
-
-
-console.log('xxxx',path.join(__dirname, "src", "models"));
+import { DataTypes, DataType } from "sequelize";
 
 // Get the models path from arguments or use the default
 const param = process.argv[2];
 const modelsPath = path.resolve(
-  path.join(__dirname, "src","plugins",param, "models") || path.join(__dirname, "src", "models")
+  param
+    ? path.join(__dirname, "..", "src", "plugins", param, "models")
+    : path.join(__dirname, "..", "src", "models")
 );
-const migrationsPath = path.resolve(__dirname, "migrations");
+const migrationsPath = path.resolve(__dirname, "..", "migrations");
 
 // Function to map Sequelize types to SQL types
 function mapSequelizeTypeToSQL(type: DataType): string {
@@ -59,7 +58,10 @@ module.exports = {
       allowNull = "false";
       defaultValue = `, defaultValue: Sequelize.UUIDV4`;
     } else if (attribute.defaultValue !== undefined) {
-      if (typeof attribute.defaultValue === "object" && attribute.defaultValue.constructor.name === "SequelizeMethod") {
+      if (
+        typeof attribute.defaultValue === "object" &&
+        attribute.defaultValue.constructor.name === "SequelizeMethod"
+      ) {
         defaultValue = `, defaultValue: ${attribute.defaultValue.toString()}`;
       } else if (typeof attribute.defaultValue === "string") {
         defaultValue = `, defaultValue: '${attribute.defaultValue}'`;
@@ -68,7 +70,9 @@ module.exports = {
       } else if (attribute.defaultValue === null) {
         defaultValue = `, defaultValue: null`;
       } else if (typeof attribute.defaultValue === "object") {
-        defaultValue = `, defaultValue: ${JSON.stringify(attribute.defaultValue)}`;
+        defaultValue = `, defaultValue: ${JSON.stringify(
+          attribute.defaultValue
+        )}`;
       }
     }
 
@@ -113,18 +117,15 @@ module.exports = {
 };
 `;
 
-  const migrationFileName = `${Date.now()}-create-${process.argv[2]}-${tableName}.js`;
+  const migrationFileName = `${Date.now()}-create-${
+    process.argv[2]
+  }-${tableName}.js`;
   fs.writeFileSync(
     path.join(migrationsPath, migrationFileName),
     migrationContent
   );
   console.log(`Generated migration for ${modelFile} -> ${migrationFileName}`);
 }
-
-// Processing all models in the directory, skipping index.ts
-// const models = fs.readdirSync(modelsPath)
-//   .filter((file: string) => (file.endsWith('.js') || file.endsWith('.ts')) && file !== 'index.ts');
-// models.forEach(generateMigrationForModel);
 
 const fileContent = fs.readFileSync(modelsPath + "/index.ts", "utf-8");
 const models = fileContent
