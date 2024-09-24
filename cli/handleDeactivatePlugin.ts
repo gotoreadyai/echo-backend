@@ -79,10 +79,49 @@ export async function handleDeactivatePlugin(): Promise<void> {
     return;
   }
 
-  // Deactivate the plugin by removing the 'active' file
-  fs.unlinkSync(activeFilePath);
+  // Remove import and app.use from app.ts if Routes.ts exists
+  try {
+    const routesFilePath = path.join(pluginDir, "Routes.ts");
+    if (fs.existsSync(routesFilePath) && fs.statSync(routesFilePath).isFile()) {
+      const projectRoot = path.join(__dirname, "..");
+      const appTsPath = path.join(projectRoot, "src", "app.ts");
+      let appTsContent = fs.readFileSync(appTsPath, "utf-8");
 
-  logSuccess(`------------------------------------------------------------`);
-  logSuccess(`Plugin '${selectedPlugin}' has been deactivated.`);
-  logSuccess(`------------------------------------------------------------`);
+      // Prepare regex patterns to remove import and app.use lines
+      const importRegex = new RegExp(`import\\s+${selectedPlugin}Routes\\s+from\\s+['"]\\.\\/plugins\\/${selectedPlugin}\\/Routes['"];?`, 'g');
+      const useRegex = new RegExp(`app\\.use\\(['"]\\/${selectedPlugin}['"],\\s*${selectedPlugin}Routes\\);?`, 'g');
+
+      // Remove import and app.use lines
+      const newAppTsContent = appTsContent
+        .replace(importRegex, '')
+        .replace(useRegex, '');
+
+      if (newAppTsContent !== appTsContent) {
+        fs.writeFileSync(appTsPath, newAppTsContent, "utf-8");
+        logSuccess(`Removed import and app.use for plugin '${selectedPlugin}' from app.ts.`);
+      } else {
+        logWarning(`Import and app.use for plugin '${selectedPlugin}' not found in app.ts.`);
+      }
+    } else {
+      logWarning(
+        `Routes.ts not found in plugin '${selectedPlugin}'. Skipping import and app.use removal.`
+      );
+    }
+  } catch (error: any) {
+    logError(`Error updating app.ts: ${error.message}`);
+  }
+
+  // Deactivate the plugin by removing the 'active' file
+  try {
+    if (fs.existsSync(activeFilePath)) {
+      fs.unlinkSync(activeFilePath);
+      logSuccess(`------------------------------------------------------------`);
+      logSuccess(`Plugin '${selectedPlugin}' has been deactivated.`);
+      logSuccess(`------------------------------------------------------------`);
+    } else {
+      logWarning(`Active file not found for plugin '${selectedPlugin}'.`);
+    }
+  } catch (error: any) {
+    logError(`Error removing active file: ${error.message}`);
+  }
 }

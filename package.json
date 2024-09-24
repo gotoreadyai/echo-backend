@@ -7,10 +7,10 @@
     "build": "tsc",
     "start": "node dist/app.js",
     "dev": "ts-node src/app.ts",
-    "CLI": "ts-node CLI.ts",
+    "cli": "node echo-cli/index.js",
     "generate:schema": "ts-node generateSchema.ts",
-    "generate:migrations": "ts-node cli/generateMigrations.ts",
-    "generate:crud:seeders": "ts-node cli/generateSeeders.ts"
+    "generate:migrations": "ts-node echo-cli/generateMigrations.ts",
+    "generate:crud:seeders": "ts-node echo-cli/generateSeeders.ts"
   },
   "dependencies": {
     "@types/express": "^4.17.21",

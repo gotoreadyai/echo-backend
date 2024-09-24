@@ -5,35 +5,27 @@ import createSlugRoutes from "./routes/slugRoutes";
 import { Document, Workspace, User } from "./models";
 import { errorHandler } from "./middleware/errorHandler";
 import { listRoutes } from "./utils/listRotues";
-
-/* #PLUGINS IMPORTS */
+/* #PLUGINS IMPORTS */import openAI from "./plugins/openAI/Routes";
+import contentUpdateBySlug from "./plugins/contentUpdateBySlug/Routes";
 import JWTauth from "./plugins/JWTauth/Routes";
-import openAICall from "./plugins/openAI/Routes";
-/* !#PLUGINS IMPORTS */
-
+import schoolBooksCascade from "./plugins/schoolBooksCascade/Routes";/* !#PLUGINS IMPORTS */
 const app = express();
 const cors = require("cors");
 app.use(cors());
-
 app.use(express.json());
 app.use(createCrudRoutes(Workspace, "workspace"));
 app.use(createCrudRoutes(Document, "document"));
 app.use(createCrudRoutes(User, "user"));
 app.use(createSlugRoutes(Workspace, 'workspace'));
 app.use(createSlugRoutes(Document, 'document'));
-
-/* #PLUGINS */
+/* #PLUGINS */app.use(openAI);
+app.use(contentUpdateBySlug);
 app.use(JWTauth);
-app.use(openAICall);
-/* !#PLUGINS */
-
-
+app.use(schoolBooksCascade);/* !#PLUGINS */
 app.use(errorHandler);
 const PORT = process.env.PORT || 3000;
 
-// Funkcja do generowania losowego koloru HSL
-
-// Wyświetlenie tras
+// Wyświetlenie kolorowych tras
 listRoutes(app);
 
 sequelize

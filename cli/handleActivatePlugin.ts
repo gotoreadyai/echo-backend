@@ -60,15 +60,16 @@ export async function handleActivatePlugin(): Promise<void> {
     logSuccess("Models directory with 'index.ts' found in the plugin.");
   } else {
     logWarning(
-      "No 'models/index.ts' found in the plugin. Skipping migration generation and application."
+      "No 'models/index.ts' found in the plugin. Skipping migration and seeder generation and application."
     );
   }
 
-  // Generate and apply migrations only if 'models/index.ts' exists
+  // Generate and apply migrations and seeders only if 'models/index.ts' exists
   if (hasModels) {
     // Generate and apply migrations
-    
+
     const migrationsDir = path.join(projectRoot, "migrations");
+    const seedersDir = path.join(projectRoot, "seeders");
     const pluginsRootDir = path.join(projectRoot, "src", "plugins"); // Adjust path if necessary
 
     logSuccess(`${pluginsRootDir}/${selectedPlugin}`);
@@ -81,7 +82,7 @@ export async function handleActivatePlugin(): Promise<void> {
         logSuccess("Generating migrations...");
 
         // List migration files before generation
-        const filesBefore = fs.existsSync(migrationsDir)
+        const filesBeforeMigrations = fs.existsSync(migrationsDir)
           ? fs.readdirSync(migrationsDir)
           : [];
 
@@ -92,21 +93,23 @@ export async function handleActivatePlugin(): Promise<void> {
         logSuccess("Migrations generated successfully.");
 
         // List migration files after generation
-        const filesAfter = fs.existsSync(migrationsDir)
+        const filesAfterMigrations = fs.existsSync(migrationsDir)
           ? fs.readdirSync(migrationsDir)
           : [];
 
-        // Determine new files by comparing before and after lists
-        const newFiles = filesAfter.filter((file) => !filesBefore.includes(file));
+        // Determine new migration files by comparing before and after lists
+        const newMigrationFiles = filesAfterMigrations.filter(
+          (file) => !filesBeforeMigrations.includes(file)
+        );
 
-        // Filter files related to the selected plugin
-        const pluginFiles = newFiles.filter((file) =>
+        // Filter migration files related to the selected plugin
+        const pluginMigrationFiles = newMigrationFiles.filter((file) =>
           file.includes(`create-${selectedPlugin}`)
         );
 
-        if (pluginFiles.length > 0) {
+        if (pluginMigrationFiles.length > 0) {
           logSuccess("Created migration files:");
-          pluginFiles.forEach((file) => {
+          pluginMigrationFiles.forEach((file) => {
             logSuccess(`- ${file}`);
           });
         } else {
@@ -119,8 +122,56 @@ export async function handleActivatePlugin(): Promise<void> {
         logSuccess("Applying all pending migrations...");
         executeCommand(`npx sequelize-cli db:migrate`, projectRoot);
         logSuccess("All pending migrations applied successfully.");
+
+        // ----------------------------
+        // Obsługa Seederów
+        // ----------------------------
+
+        logSuccess("Generating seeders...");
+
+        // List seeder files before generation
+        const filesBeforeSeeders = fs.existsSync(seedersDir)
+          ? fs.readdirSync(seedersDir)
+          : [];
+
+        executeCommand(
+          `npm run generate:seeders -- ${selectedPlugin}`,
+          projectRoot
+        );
+        logSuccess("Seeders generated successfully.");
+
+        // List seeder files after generation
+        const filesAfterSeeders = fs.existsSync(seedersDir)
+          ? fs.readdirSync(seedersDir)
+          : [];
+
+        // Determine new seeder files by comparing before and after lists
+        const newSeederFiles = filesAfterSeeders.filter(
+          (file) => !filesBeforeSeeders.includes(file)
+        );
+
+        // Filter seeder files related to the selected plugin
+        const pluginSeederFiles = newSeederFiles.filter((file) =>
+          file.includes(`${selectedPlugin}`)
+        );
+
+        if (pluginSeederFiles.length > 0) {
+          logSuccess("Created seeder files:");
+          pluginSeederFiles.forEach((file) => {
+            logSuccess(`- ${file}`);
+          });
+        } else {
+          logError(
+            `No new seeder files were created for plugin '${selectedPlugin}'.`
+          );
+        }
+
+        // Apply all pending seeders
+        logSuccess("Applying all pending seeders...");
+        executeCommand(`npx sequelize-cli db:seed:all`, projectRoot);
+        logSuccess("All pending seeders applied successfully.");
       } catch (error: any) {
-        logError(`Error generating or applying migrations: ${error.message}`);
+        logError(`Error generating or applying migrations/seeders: ${error.message}`);
       }
     } else {
       logError(`Plugins directory does not exist at ${pluginsRootDir}.`);
@@ -137,7 +188,7 @@ export async function handleActivatePlugin(): Promise<void> {
 
       // Prepare lines to add
       const importLine = `import ${selectedPlugin}Routes from "./plugins/${selectedPlugin}/Routes";\n`;
-      const useLine = `app.use('/${selectedPlugin}', ${selectedPlugin}Routes);\n`;
+      const useLine = `app.use(${selectedPlugin}Routes);\n`;
 
       // Sections in app.ts
       const importSectionStart = "/* #PLUGINS IMPORTS */";
@@ -170,8 +221,10 @@ export async function handleActivatePlugin(): Promise<void> {
       if (!appTsContent.includes(useLine.trim())) {
         const pluginsParts = appTsContent.split(pluginsSectionEnd);
         if (pluginsParts.length === 2) {
+          // Usuń wszelkie istniejące puste linie między markerami
+          const pluginsContent = pluginsParts[0].replace(/\n\s*\n/g, "\n");
           appTsContent =
-            pluginsParts[0] +
+            pluginsContent +
             useLine +
             pluginsSectionEnd +
             pluginsParts[1];

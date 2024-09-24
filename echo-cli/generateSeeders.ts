@@ -5,12 +5,20 @@ import fs from "fs";
 import { Workspace } from "../src/models"; // Zakładam, że masz odpowiedni eksport w pliku models/index.ts
 import pluralize from "pluralize";
 
-const contentPath = path.resolve(path.join(__dirname, "seeders"));
-const seedersPath = path.resolve(path.join(__dirname, "../seeders"));
+console.log();
 
 const templateName = process.argv[2]; // Nowy parametr
 const workspaceSlug = process.argv[3];
 const documentSingular = process.argv[4];
+const plugin = process.argv[5];
+
+const blueprintPath = path.resolve(path.join(__dirname, "seeders"));
+const contentPath = path.resolve(
+  plugin
+    ? path.join(__dirname, "../src/plugins", plugin, "seeders")
+    : path.join(__dirname, "seeders")
+);
+const seedersPath = path.resolve(path.join(__dirname, "../seeders"));
 
 const ORANGE_COLOR = "\x1b[38;5;214m";
 const RESET_COLOR = "\x1b[0m";
@@ -22,7 +30,10 @@ const getWorkspaceId = async (slug: string): Promise<string | null> => {
     if (workspace) {
       return workspace.id;
     } else {
-      console.error(`${ORANGE_COLOR}Nie znaleziono workspace dla sluga:${RESET_COLOR}`, slug);
+      console.error(
+        `${ORANGE_COLOR}Nie znaleziono workspace dla sluga:${RESET_COLOR}`,
+        slug
+      );
       return null;
     }
   } catch (err) {
@@ -59,7 +70,7 @@ const loadJsonContent = (fileName: string): Promise<string> => {
 const main = async () => {
   let workspaceId: string | null = null;
 
-  if (templateName === "crud" ||templateName === "page" ) {
+  if (templateName === "crud" || templateName === "page") {
     workspaceId = await getWorkspaceId(workspaceSlug);
 
     if (!workspaceId) {
@@ -90,7 +101,10 @@ const main = async () => {
         `${contentPath}/${documentSingular}/delete.json`
       );
     } catch (err) {
-      console.error(`${ORANGE_COLOR}Błąd odczytu plików JSON:${RESET_COLOR}`, err);
+      console.error(
+        `${ORANGE_COLOR}Błąd odczytu plików JSON:${RESET_COLOR}`,
+        err
+      );
 
       return;
     }
@@ -102,7 +116,10 @@ const main = async () => {
         `${contentPath}/${documentSingular}/page.json`
       );
     } catch (err) {
-      console.error(`${ORANGE_COLOR}Błąd odczytu plików JSON:${RESET_COLOR}`, err);
+      console.error(
+        `${ORANGE_COLOR}Błąd odczytu plików JSON:${RESET_COLOR}`,
+        err
+      );
 
       return;
     }
@@ -111,7 +128,7 @@ const main = async () => {
   try {
     // Odczyt pliku źródłowego zgodnie z wybranym szablonem
     fs.readFile(
-      `${contentPath}/seed-${templateName}-blueprint.js`,
+      `${blueprintPath}/seed-${templateName}-blueprint.js`,
       "utf8",
       (err: NodeJS.ErrnoException | null, data: string) => {
         if (err) {
