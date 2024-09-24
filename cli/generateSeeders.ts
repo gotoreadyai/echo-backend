@@ -5,11 +5,15 @@ import fs from "fs";
 import { Workspace } from "../src/models"; // Zakładam, że masz odpowiedni eksport w pliku models/index.ts
 import pluralize from "pluralize";
 
-const contentPath = path.resolve(path.join(__dirname, "../content"));
+const contentPath = path.resolve(path.join(__dirname, "seeders"));
 const seedersPath = path.resolve(path.join(__dirname, "../seeders"));
 
-const workspaceSlug = process.argv[2];
-const documentSingular = process.argv[3];
+const templateName = process.argv[2]; // Nowy parametr
+const workspaceSlug = process.argv[3];
+const documentSingular = process.argv[4];
+
+const ORANGE_COLOR = "\x1b[38;5;214m";
+const RESET_COLOR = "\x1b[0m";
 
 // Funkcja odczytująca id dla podanego sluga
 const getWorkspaceId = async (slug: string): Promise<string | null> => {
@@ -18,7 +22,7 @@ const getWorkspaceId = async (slug: string): Promise<string | null> => {
     if (workspace) {
       return workspace.id;
     } else {
-      console.error("Nie znaleziono workspace dla sluga:", slug);
+      console.error(`${ORANGE_COLOR}Nie znaleziono workspace dla sluga:${RESET_COLOR}`, slug);
       return null;
     }
   } catch (err) {
@@ -53,32 +57,61 @@ const loadJsonContent = (fileName: string): Promise<string> => {
 };
 
 const main = async () => {
-  const workspaceId = await getWorkspaceId(workspaceSlug);
+  let workspaceId: string | null = null;
 
-  if (!workspaceId) {
-    return;
+  if (templateName === "crud" ||templateName === "page" ) {
+    workspaceId = await getWorkspaceId(workspaceSlug);
+
+    if (!workspaceId) {
+      return;
+    }
   }
 
   const timestamp = generateTimestamp();
 
-  try {
-    // Wczytaj zawartość plików JSON
-    const contentList = await loadJsonContent(
-      `${contentPath}/${documentSingular}/list.json`
-    );
-    const contentCreate = await loadJsonContent(
-      `${contentPath}/${documentSingular}/create.json`
-    );
-    const contentUpdate = await loadJsonContent(
-      `${contentPath}/${documentSingular}/edit.json`
-    );
-    const contentDelete = await loadJsonContent(
-      `${contentPath}/${documentSingular}/delete.json`
-    );
+  let contentList = "";
+  let contentCreate = "";
+  let contentUpdate = "";
+  let contentDelete = "";
+  let contentPage = "";
 
-    // Odczyt pliku źródłowego
+  if (templateName === "crud") {
+    try {
+      contentList = await loadJsonContent(
+        `${contentPath}/${documentSingular}/list.json`
+      );
+      contentCreate = await loadJsonContent(
+        `${contentPath}/${documentSingular}/create.json`
+      );
+      contentUpdate = await loadJsonContent(
+        `${contentPath}/${documentSingular}/edit.json`
+      );
+      contentDelete = await loadJsonContent(
+        `${contentPath}/${documentSingular}/delete.json`
+      );
+    } catch (err) {
+      console.error(`${ORANGE_COLOR}Błąd odczytu plików JSON:${RESET_COLOR}`, err);
+
+      return;
+    }
+  }
+
+  if (templateName === "page") {
+    try {
+      contentPage = await loadJsonContent(
+        `${contentPath}/${documentSingular}/page.json`
+      );
+    } catch (err) {
+      console.error(`${ORANGE_COLOR}Błąd odczytu plików JSON:${RESET_COLOR}`, err);
+
+      return;
+    }
+  }
+
+  try {
+    // Odczyt pliku źródłowego zgodnie z wybranym szablonem
     fs.readFile(
-      `${contentPath}/seed-crud-blueprint.js`,
+      `${contentPath}/seed-${templateName}-blueprint.js`,
       "utf8",
       (err: NodeJS.ErrnoException | null, data: string) => {
         if (err) {
@@ -92,7 +125,14 @@ const main = async () => {
         updatedData = updatedData.replace(/`id2`/g, uuidv4());
         updatedData = updatedData.replace(/`id3`/g, uuidv4());
         updatedData = updatedData.replace(/`id4`/g, uuidv4());
-        updatedData = updatedData.replace(/`workspaceId`/g, workspaceId);
+
+        if (templateName === "crud" || templateName === "page") {
+          updatedData = updatedData.replace(
+            /`workspaceId`/g,
+            workspaceId || ""
+          );
+        }
+
         updatedData = updatedData.replace(/`singular`/g, documentSingular);
         updatedData = updatedData.replace(
           /`prular`/g,
@@ -102,10 +142,11 @@ const main = async () => {
         updatedData = updatedData.replace(/`content-create`/g, contentCreate);
         updatedData = updatedData.replace(/`content-edit`/g, contentUpdate);
         updatedData = updatedData.replace(/`content-delete`/g, contentDelete);
+        updatedData = updatedData.replace(/`content-page`/g, contentPage);
 
         // Zapis do nowego pliku z dodanym timestampem
         fs.writeFile(
-          `${seedersPath}/${timestamp}-crud-${workspaceSlug}-${documentSingular}.js`,
+          `${seedersPath}/${timestamp}-${templateName}-${workspaceSlug}-${documentSingular}.js`,
           updatedData,
           (err: NodeJS.ErrnoException | null) => {
             if (err) {

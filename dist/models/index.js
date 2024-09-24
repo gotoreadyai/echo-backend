@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.File = exports.DocumentCategory = exports.Category = exports.Document = exports.Workspace = exports.User = void 0;
+exports.DocumentFile = exports.File = exports.DocumentCategory = exports.Category = exports.Document = exports.Workspace = exports.User = void 0;
 const user_1 = __importDefault(require("./user"));
 exports.User = user_1.default;
 const workspace_1 = __importDefault(require("./workspace"));
@@ -16,3 +16,5 @@ const documentCategory_1 = __importDefault(require("./documentCategory"));
 exports.DocumentCategory = documentCategory_1.default;
 const file_1 = __importDefault(require("./file"));
 exports.File = file_1.default;
+const documentFile_1 = __importDefault(require("./documentFile"));
+exports.DocumentFile = documentFile_1.default;

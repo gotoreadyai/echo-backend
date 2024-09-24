@@ -1,29 +1,48 @@
 #!/usr/bin/env node
 
 import inquirer from 'inquirer';
+import fs from 'fs';
+import path from 'path';
 import { handleConfig } from './cli/handleConfig';
 import { handleLoadPlugin } from './cli/handleLoadPlugin';
 import { handleActivatePlugin } from './cli/handleActivatePlugin';
 import { handleDeactivatePlugin } from './cli/handleDeactivatePlugin';
 
 (async () => {
+  // Wyczyść konsolę
+  console.clear();
+
   let continueLoop = true;
 
   while (continueLoop) {
     try {
-      const { action }: { action: string } = await inquirer.prompt([
-        {
-          type: 'list',
-          name: 'action',
-          message: 'Choose an action:',
-          choices: [
-            'config',
+      // Sprawdzenie zawartości katalogu src/migrations
+      const migrationsDir = path.resolve(__dirname, 'migrations');
+      let isMigrationsEmpty = true;
+
+      if (fs.existsSync(migrationsDir)) {
+        const files = fs.readdirSync(migrationsDir);
+        isMigrationsEmpty = files.length === 0;
+      }
+
+      // Dynamiczne ustawianie opcji menu
+      const choices = isMigrationsEmpty
+        ? ['SETUP!', new inquirer.Separator(), 'Exit']
+        : [
+            'SETUP!',
             'loadPlugin',
             'activatePlugin',
             'deactivatePlugin',
             new inquirer.Separator(),
             'Exit',
-          ],
+          ];
+
+      const { action }: { action: string } = await inquirer.prompt([
+        {
+          type: 'list',
+          name: 'action',
+          message: 'Choose an action:',
+          choices,
         },
       ]);
 
@@ -34,7 +53,7 @@ import { handleDeactivatePlugin } from './cli/handleDeactivatePlugin';
       }
 
       switch (action) {
-        case 'config':
+        case 'SETUP!':
           await handleConfig();
           break;
         case 'loadPlugin':
