@@ -1,3 +1,32 @@
+const drawFrame = (message, key) => {
+  let colorCode;
+  
+  switch (key) {
+    case 'ADD':
+      colorCode = "\x1b[32m"; // Green text for "ADD"
+      break;
+    case 'EXE':
+      colorCode = "\x1b[95m"; // Light magenta text for "EXE"
+      break;
+    default:
+      colorCode = "\x1b[34m"; // Default to blue text
+  }
+console.log("\n");
+
+  console.log(colorCode, "\x1b[40m", "╭─────╮", "\x1b[0m"); // Using the selected color
+  console.log(
+    colorCode,
+    "\x1b[40m",
+    "│",
+    key,
+    "│",
+    "\x1b[0m",
+    message,
+    "\x1b[0m"
+  );
+  console.log(colorCode, "\x1b[40m", "╰─────╯", "\x1b[0m");
+};
+
 const msg = {
   color: {
     green: "\x1b[32m",
@@ -26,6 +55,15 @@ const msg = {
       } w katalogu pluginu.${msg.color.reset}`
     );
   },
+  isSeed: (hasModels) => {
+    console.log(
+      `${
+        hasModels ? msg.color.green : msg.color.orange
+      }Plik seedSlug/_init.json ${
+        hasModels ? "istnieje" : "nie istnieje"
+      } w katalogu pluginu.${msg.color.reset}`
+    );
+  },
 
   exeOK: (plugin) => {
     console.log(
@@ -40,4 +78,4 @@ const msg = {
   },
 };
 
-module.exports = msg;
+module.exports = { msg, drawFrame };

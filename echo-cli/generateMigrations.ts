@@ -4,14 +4,14 @@ import { DataTypes, DataType } from "sequelize";
 
 // Get the models path from arguments or use the default
 const param = process.argv[2];
-console.log("\x1b[34m", "Warming up migrations generator for plugin: ", param);
-
 const modelsPath = path.resolve(
   param
     ? path.join(__dirname, "..", "src", "plugins", param, "models")
     : path.join(__dirname, "..", "src", "models")
 );
 const migrationsPath = path.resolve(__dirname, "..", "migrations");
+
+console.log("\x1b[34m", "Warming up migrations generator for plugin: ", param);
 console.log("MODELS:", param, modelsPath);
 
 // Function to map Sequelize types to SQL types
@@ -62,21 +62,7 @@ module.exports = {
       defaultValue = `, defaultValue: Sequelize.UUIDV4`;
       console.log("def:" + defaultValue, key);
 
-      const colors = [
-        "\x1b[43m",
-        "\x1b[34m",
-        "\x1b[32m",
-        "\x1b[35m",
-        "\x1b[31m",
-        "\x1b[30m",
-        "\x1b[37m",
-        "\x1b[30m",
-      ];
-      const randomColor = colors[Math.floor(Math.random() * colors.length)];
-      console.log(
-        "-------------------------------------------------",
-        randomColor
-      );
+      console.log("─────╮");
     } else if (attribute.defaultValue !== undefined) {
       if (
         typeof attribute.defaultValue === "object" &&
@@ -137,16 +123,12 @@ module.exports = {
 };
 `;
 
-  const migrationFileName = `${Date.now()}-create-${
-    process.argv[2]
-  }-${tableName}.js`;
+  const migrationFileName = `${Date.now()}-${process.argv[2]}-${tableName}.js`;
   fs.writeFileSync(
     path.join(migrationsPath, migrationFileName),
     migrationContent
   );
-  console.log(
-    `Generated▔migration for ${modelFile} ▗ -> ${migrationFileName} ▚`
-  );
+  console.log(`Generated migration for ${modelFile} -> ${migrationFileName}`);
 }
 
 const fileContent = fs.readFileSync(modelsPath + "/index.ts", "utf-8");
