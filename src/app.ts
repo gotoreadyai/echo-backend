@@ -5,7 +5,10 @@ import createSlugRoutes from "./routes/slugRoutes";
 import { Document, Workspace, User } from "./models";
 import { errorHandler } from "./middleware/errorHandler";
 import { listRoutes } from "./utils/listRotues";
-/* #PLUGINS IMPORTS *//* !#PLUGINS IMPORTS */
+/* #PLUGINS IMPORTS */
+
+import JWTauth from "./plugins/JWTauth/Routes";
+/* !#PLUGINS IMPORTS */
 const app = express();
 const cors = require("cors");
 app.use(cors());
@@ -15,7 +18,10 @@ app.use(createCrudRoutes(Document, "document"));
 app.use(createCrudRoutes(User, "user"));
 app.use(createSlugRoutes(Workspace, "workspace"));
 app.use(createSlugRoutes(Document, "document"));
-/* #PLUGINS *//* !#PLUGINS */
+/* #PLUGINS */
+
+app.use(JWTauth);
+/* !#PLUGINS */
 app.use(errorHandler);
 const PORT = process.env.PORT || 3000;
 
