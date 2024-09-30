@@ -1,7 +1,7 @@
 const pluralize = require("pluralize");
 const fs = require("fs");
 const path = require("path");
-const msg = require("./../utils/messages");
+const { msg } = require("./../utils/messages");
 const cmdService = require("./commandService");
 const { showTopBar, clearTopBar } = require("./topBarService");
 
@@ -57,6 +57,7 @@ const modelService = {
     clearTopBar();
   },
   parseIndex: (plugin) => {
+    console.log('parseIndex',plugin);
     const modelsDirectory = path.join(
       __dirname,
       "../../src/plugins",
@@ -70,6 +71,8 @@ const modelService = {
     }
 
     const fileContent = fs.readFileSync(indexFilePath, "utf-8");
+    console.log('fileContent',fileContent);
+    
     const imports = fileContent
       .split("\n")
       .filter((line) => line.startsWith("import "))
@@ -97,6 +100,8 @@ const modelService = {
   },
 
   runAsActivate: (plugin) => {
+    
+    
     showTopBar(`Processing migrations for plugin: ${plugin.name}...`);
     const cmd = "npm run generate:migrations -- " + plugin.name;
     const statusM1 = cmdService.runCmd(cmd);

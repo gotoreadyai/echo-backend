@@ -48,7 +48,7 @@ export const getOne =
       if (item) {
         res.json(item);
       } else {
-        res.status(404).send(`${modelName} not found`);
+        res.status(404).json({ error: `${modelName} not found`});
       }
     } catch (err) {
       next(err);
@@ -82,7 +82,7 @@ export const updateOne =
       if (updatedCount > 0 && updatedItems) {
         res.json(updatedItems[0]);
       } else {
-        res.status(404).send(`${modelName} not found`);
+        res.status(404).json({ error: `${modelName} not found`});
       }
     } catch (err) {
       next(err);
@@ -97,7 +97,7 @@ export const deleteOne =
       if (deletedCount > 0) {
         res.status(200).json(req.params.id);
       } else {
-        res.status(404).send(`${modelName} not found`);
+        res.status(404).json({ error: `${modelName} not found`});
       }
     } catch (err) {
       next(err);

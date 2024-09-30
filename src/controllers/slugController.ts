@@ -17,7 +17,7 @@ export const getOneBySlug =
       if (item) {
         res.json(item);
       } else {
-        res.status(404).send(`${modelName} not found`);
+        res.status(404).json({ error: `${modelName} not found`});
       }
     } catch (err) {
       next(err);
@@ -36,7 +36,7 @@ export const updateOneBySlug =
       if (updatedCount > 0 && updatedItems) {
         res.json(updatedItems[0]);
       } else {
-        res.status(404).send(`${modelName} not found`);
+        res.status(404).json({ error: `${modelName} not found`});
       }
     } catch (err) {
       next(err);
@@ -50,7 +50,8 @@ export const updateContentBySlug =
       const { key, value } = req.body;
 
       if (!key || value === undefined) {
-        return res.status(400).send("Key and value are required");
+        return res.status(404).json({ error: `Key and value are required`});
+        
       }
 
       const item = await model.findOne({
@@ -59,7 +60,7 @@ export const updateContentBySlug =
 
       if (!item) {
         console.log(`${modelName} not found`);
-        return res.status(404).send(`${modelName} not found`);
+        return res.status(404).json(`${modelName} not found`);
       }
 
       // Zaktualizuj tylko wybrany klucz w obiekcie content

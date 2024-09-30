@@ -5,10 +5,13 @@ import createSlugRoutes from "./routes/slugRoutes";
 import { Document, Workspace, User } from "./models";
 import { errorHandler } from "./middleware/errorHandler";
 import { listRoutes } from "./utils/listRotues";
-/* #PLUGINS IMPORTS */
+import { saveData } from "./controllers/seedController";
 
+/* #PLUGINS IMPORTS */
 import JWTauth from "./plugins/JWTauth/Routes";
+import SchoolDaze from "./plugins/schoolDaze/Routes";
 /* !#PLUGINS IMPORTS */
+
 const app = express();
 const cors = require("cors");
 app.use(cors());
@@ -18,10 +21,13 @@ app.use(createCrudRoutes(Document, "document"));
 app.use(createCrudRoutes(User, "user"));
 app.use(createSlugRoutes(Workspace, "workspace"));
 app.use(createSlugRoutes(Document, "document"));
-/* #PLUGINS */
+app.post("/seed", saveData);
 
+/* #PLUGINS */
 app.use(JWTauth);
+app.use(SchoolDaze);
 /* !#PLUGINS */
+
 app.use(errorHandler);
 const PORT = process.env.PORT || 3000;
 
