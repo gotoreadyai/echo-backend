@@ -34,9 +34,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteOne = exports.updateOne = exports.createOne = exports.getOne = exports.getAll = void 0;
 const crudService = __importStar(require("../services/crudService"));
-const MODEL_INCLUDES_1 = require("../MODEL_INCLUDES"); // Import mapy include
 const getAll = (model, modelName) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
     try {
         const { page, pageSize, where } = req.query;
         const parsedPage = page ? parseInt(page, 10) : undefined;
@@ -44,10 +42,10 @@ const getAll = (model, modelName) => (req, res, next) => __awaiter(void 0, void 
             ? parseInt(pageSize, 10)
             : undefined;
         // Pobierz odpowiedni include z pliku na podstawie modelName
-        const modelInclude = ((_a = MODEL_INCLUDES_1.modelIncludes[modelName]) === null || _a === void 0 ? void 0 : _a.include) || [];
+        // const modelInclude = modelIncludes[modelName]?.include || [];
         const options = {
             where: where,
-            include: modelInclude, // Dynamicznie załaduj include dla modelu
+            include: model.include || [], // Dynamicznie załaduj include dla modelu
             limit: parsedPageSize,
             offset: parsedPage && parsedPageSize
                 ? (parsedPage - 1) * parsedPageSize
@@ -68,7 +66,7 @@ const getOne = (model, modelName) => (req, res, next) => __awaiter(void 0, void 
             res.json(item);
         }
         else {
-            res.status(404).send(`${modelName} not found`);
+            res.status(404).json({ error: `${modelName} not found` });
         }
     }
     catch (err) {
@@ -94,7 +92,7 @@ const updateOne = (model, modelName) => (req, res, next) => __awaiter(void 0, vo
             res.json(updatedItems[0]);
         }
         else {
-            res.status(404).send(`${modelName} not found`);
+            res.status(404).json({ error: `${modelName} not found` });
         }
     }
     catch (err) {
@@ -109,7 +107,7 @@ const deleteOne = (model, modelName) => (req, res, next) => __awaiter(void 0, vo
             res.status(200).json(req.params.id);
         }
         else {
-            res.status(404).send(`${modelName} not found`);
+            res.status(404).json({ error: `${modelName} not found` });
         }
     }
     catch (err) {

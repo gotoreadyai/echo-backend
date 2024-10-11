@@ -10,8 +10,12 @@ const slugRoutes_1 = __importDefault(require("./routes/slugRoutes"));
 const models_1 = require("./models");
 const errorHandler_1 = require("./middleware/errorHandler");
 const listRotues_1 = require("./utils/listRotues");
+const seedController_1 = require("./controllers/seedController");
 /* #PLUGINS IMPORTS */
-const Routes_1 = __importDefault(require("./plugins/schoolBooksCascade/Routes"));
+const Routes_1 = __importDefault(require("./plugins/schoolDaze/Routes"));
+const Routes_2 = __importDefault(require("./plugins/schoolDaze/Routes"));
+const Routes_3 = __importDefault(require("./plugins/JWTauth/Routes"));
+const Routes_4 = __importDefault(require("./plugins/openAI/Routes"));
 /* !#PLUGINS IMPORTS */
 const app = (0, express_1.default)();
 const cors = require("cors");
@@ -20,14 +24,19 @@ app.use(express_1.default.json());
 app.use((0, crudRoutes_1.default)(models_1.Workspace, "workspace"));
 app.use((0, crudRoutes_1.default)(models_1.Document, "document"));
 app.use((0, crudRoutes_1.default)(models_1.User, "user"));
-app.use((0, slugRoutes_1.default)(models_1.Workspace, 'workspace'));
-app.use((0, slugRoutes_1.default)(models_1.Document, 'document'));
+app.use((0, crudRoutes_1.default)(models_1.CallingFunction, "callingFunction"));
+app.use((0, crudRoutes_1.default)(models_1.Permission, "permission"));
+app.use((0, slugRoutes_1.default)(models_1.Workspace, "workspace"));
+app.use((0, slugRoutes_1.default)(models_1.Document, "document"));
+app.post("/seed", seedController_1.saveData);
 /* #PLUGINS */
 app.use(Routes_1.default);
+app.use(Routes_2.default);
+app.use(Routes_3.default);
+app.use(Routes_4.default);
 /* !#PLUGINS */
 app.use(errorHandler_1.errorHandler);
 const PORT = process.env.PORT || 3000;
-// Wyświetlenie kolorowych tras
 (0, listRotues_1.listRoutes)(app);
 db_1.default
     .sync()

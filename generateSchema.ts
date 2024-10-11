@@ -7,7 +7,7 @@ import pluralize from "pluralize";
 import sequelize from "./src/db";
 
 // Inicjalizacja pustego obiektu na modele
-const export_path = "../backoffice-service/models_EXPORT";
+const export_path:any = process.env.FRONTEND_PATH;
 
 const models: { [key: string]: any } = {};
 const migrationsDir = path.join(__dirname, "migrations");

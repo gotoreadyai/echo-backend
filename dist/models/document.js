@@ -20,6 +20,10 @@ const user_1 = __importDefault(require("./user"));
 const slugGenerator_1 = require("../utils/slugGenerator");
 class Document extends sequelize_1.Model {
 }
+Document.include = {
+    model: workspace_1.default,
+    attributes: ["id", "title", "slug"],
+};
 Document.init({
     id: {
         type: sequelize_1.DataTypes.UUID,

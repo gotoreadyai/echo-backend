@@ -34,6 +34,8 @@ function mapSequelizeTypeToSQL(type: DataType): string {
     }
     const sqlValues = values.map((v: string) => `'${v}'`).join(", ");
     return `ENUM(${sqlValues})`;
+  } else if (type instanceof DataTypes.BOOLEAN) {
+    return "BOOLEAN";
   } else {
     throw new Error(`Unsupported type: ${type.constructor.name}`);
   }

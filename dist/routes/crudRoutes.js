@@ -31,15 +31,9 @@ const crudController = __importStar(require("../controllers/crudController"));
 const pluralize_1 = __importDefault(require("pluralize"));
 const verifyToken_1 = require("../middleware/verifyToken");
 const ownership_1 = require("../middleware/ownership");
-const models_1 = require("../models");
 const createCrudRoutes = (model, modelName) => {
     const router = express_1.default.Router();
     const pluralizedName = (0, pluralize_1.default)(modelName);
-    const allowedIncludes = modelName.toLowerCase() === "document"
-        ? [
-            { model: models_1.Workspace, as: "workspace" },
-        ]
-        : [];
     router.get(`/${pluralizedName}`, crudController.getAll(model, modelName));
     router.get(`/${modelName}/:id`, crudController.getOne(model, modelName));
     router.post(`/${modelName}`, verifyToken_1.verifyToken, crudController.createOne(model));

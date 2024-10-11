@@ -9,6 +9,7 @@ interface WorkspaceAttributes {
   content: Record<string, any>;
   ownerId: string;
   slug: string;
+  plugin: string;
 }
 
 interface WorkspaceCreationAttributes
@@ -23,6 +24,7 @@ class Workspace
   public content!: Record<string, any>;
   public ownerId!: string;
   public slug!: string;
+  public plugin!: string;
 }
 
 Workspace.init(
@@ -45,6 +47,10 @@ Workspace.init(
     content: {
       type: DataTypes.JSONB,
       defaultValue: {},
+      allowNull: false,
+    },
+    plugin: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
     ownerId: {

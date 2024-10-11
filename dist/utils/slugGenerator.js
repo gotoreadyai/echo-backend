@@ -33,7 +33,6 @@ function generateUniqueSlug(model, title, id) {
             existingEntry = yield model.findOne({ where: whereClause });
             count++;
         }
-        console.log(slug);
         return slug;
     });
 }

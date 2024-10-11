@@ -77,12 +77,15 @@ npx sequelize-cli db:migrate:undo:all
 # create new starter migration files
 npm run generate:migrations
 
-npx sequelize-cli db:migrate
+npx sequelize-cli db:migratepremi
 npx sequelize-cli db:seed:all
 ...
 # if undo:
 npx sequelize db:seed:undo
 ...
+
+# to update frontend schema
+npm run generate:schema
 
 ## Author
 

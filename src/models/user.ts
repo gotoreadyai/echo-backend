@@ -22,8 +22,6 @@ class User
   public id!: string;
   public email!: string;
   public password!: string;
-  public firstName!: string;
-  public lastName!: string;
   public role!: "user" | "teacher" | "student" | "admin"; 
 
   public readonly createdAt!: Date;
@@ -44,14 +42,6 @@ User.init(
       validate: {
         isEmail: true,
       },
-    },
-    firstName: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    lastName: {
-      type: DataTypes.STRING,
-      allowNull: true,
     },
     password: {
       type: DataTypes.STRING,

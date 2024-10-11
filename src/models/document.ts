@@ -8,6 +8,7 @@ interface DocumentAttributes {
   id: string;
   title: string;
   content: Record<string, any>;
+  plugin: string;
   workspaceId: string;
   ownerId: string;
   slug: string;
@@ -23,9 +24,14 @@ class Document
   public id!: string;
   public title!: string;
   public content!: Record<string, any>;
+  public plugin!:string;
   public workspaceId!: string;
   public ownerId!: string;
   public slug!: string;
+  public static include = {
+    model: Workspace,
+    attributes: ["id", "title", "slug"],
+  };
 }
 
 Document.init(
@@ -47,6 +53,10 @@ Document.init(
     content: {
       type: DataTypes.JSONB,
       defaultValue: {},
+      allowNull: false,
+    },
+    plugin: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
     workspaceId: {
@@ -87,7 +97,6 @@ Workspace.hasMany(Document, { foreignKey: "workspaceId" });
 
 export default Document;
 
-
-export const include =  {
+export const include = {
   model: Workspace,
-}
+};

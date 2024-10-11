@@ -29,7 +29,5 @@ export async function generateUniqueSlug<T extends Model>(
     count++;
   }
 
-  console.log(slug);
-
   return slug;
 }

@@ -1,26 +1,24 @@
 import { Request, Response, NextFunction } from "express";
 import * as crudService from "../services/crudService";
 import { Model, ModelStatic } from "sequelize";
-
 import { RequestWithUser } from "../middleware/verifyToken";
-import { modelIncludes } from "../MODEL_INCLUDES"; // Import mapy include
 
 export const getAll =
   <T extends Model>(model: ModelStatic<T>, modelName: string) =>
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const { page, pageSize, where } = req.query;
+      const { page, pageSize, where } = req.query;      
       const parsedPage = page ? parseInt(page as string, 10) : undefined;
       const parsedPageSize = pageSize
         ? parseInt(pageSize as string, 10)
         : undefined;
 
       // Pobierz odpowiedni include z pliku na podstawie modelName
-      const modelInclude = modelIncludes[modelName]?.include || [];
+      // const modelInclude = modelIncludes[modelName]?.include || [];
 
       const options = {
         where: where as any,
-        include: modelInclude, // Dynamicznie załaduj include dla modelu
+        include: (model as any).include || [], // Dynamicznie załaduj include dla modelu
         limit: parsedPageSize,
         offset:
           parsedPage && parsedPageSize
@@ -48,7 +46,7 @@ export const getOne =
       if (item) {
         res.json(item);
       } else {
-        res.status(404).json({ error: `${modelName} not found`});
+        res.status(404).json({ error: `${modelName} not found` });
       }
     } catch (err) {
       next(err);
@@ -82,7 +80,7 @@ export const updateOne =
       if (updatedCount > 0 && updatedItems) {
         res.json(updatedItems[0]);
       } else {
-        res.status(404).json({ error: `${modelName} not found`});
+        res.status(404).json({ error: `${modelName} not found` });
       }
     } catch (err) {
       next(err);
@@ -97,7 +95,7 @@ export const deleteOne =
       if (deletedCount > 0) {
         res.status(200).json(req.params.id);
       } else {
-        res.status(404).json({ error: `${modelName} not found`});
+        res.status(404).json({ error: `${modelName} not found` });
       }
     } catch (err) {
       next(err);

@@ -41,7 +41,7 @@ const getOneBySlug = (model, modelName) => (req, res, next) => __awaiter(void 0,
             res.json(item);
         }
         else {
-            res.status(404).send(`${modelName} not found`);
+            res.status(404).json({ error: `${modelName} not found` });
         }
     }
     catch (err) {
@@ -56,7 +56,7 @@ const updateOneBySlug = (model, modelName) => (req, res, next) => __awaiter(void
             res.json(updatedItems[0]);
         }
         else {
-            res.status(404).send(`${modelName} not found`);
+            res.status(404).json({ error: `${modelName} not found` });
         }
     }
     catch (err) {
@@ -68,14 +68,14 @@ const updateContentBySlug = (model, modelName) => (req, res, next) => __awaiter(
     try {
         const { key, value } = req.body;
         if (!key || value === undefined) {
-            return res.status(400).send("Key and value are required");
+            return res.status(404).json({ error: `Key and value are required` });
         }
         const item = yield model.findOne({
             where: { slug: req.params.slug },
         });
         if (!item) {
             console.log(`${modelName} not found`);
-            return res.status(404).send(`${modelName} not found`);
+            return res.status(404).json(`${modelName} not found`);
         }
         // Zaktualizuj tylko wybrany klucz w obiekcie content
         const updatedContent = Object.assign(Object.assign({}, item.content), { [key]: value });

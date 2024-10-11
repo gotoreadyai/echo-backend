@@ -3,7 +3,7 @@ import { saveJsonToFile } from "../services/seedService";
 
 export const saveData = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { name, data } = req.body;
+    const { name, data, plugin } = req.body;
     const filePath = await saveJsonToFile('./incommingSeeds', name, data);
     res.status(201).json({ message: "Dane zapisane pomyślnie", filePath });
   } catch (error) {

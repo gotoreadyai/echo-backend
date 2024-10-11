@@ -157,13 +157,14 @@ const seedService = {
    * @param {Object} plugin - Obiekt pluginu.
    */
   processGroupedData(groupedData, plugin) {
+    const pluginSchemasPath = path.join(__dirname, "../../src/plugins/", plugin.name, "seedSlug", "schemas");
     const schemasPath = path.join(__dirname, "../schemas");
 
     groupedData.forEach((data, model) => {
       drawFrame(`Processing model '${model}' with ${data.length} records`, "INI");
       data.forEach(item => this.processItem(item, plugin));
 
-      let schema = file.readTextFile(schemasPath, `_${model}.js`);
+      let schema = file.readTextFile(pluginSchemasPath ? pluginSchemasPath : schemasPath, `_${model}.js`);
       schema = this.addDataToSchema(schema, data);
 
       const seederFileName = `${generateTimestamp()}-${plugin.name}-${model}.js`;
