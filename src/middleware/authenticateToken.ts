@@ -1,7 +1,7 @@
 // src/middleware/authenticateToken.ts
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { RequestWithId } from "../plugins/JWTauth/Types";
+import { RequestWithId } from "../plugins/_JWTauth/Types";
 
 const jwtSecret = process.env.JWT_SECRET!;
 

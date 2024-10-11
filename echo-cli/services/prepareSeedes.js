@@ -9,8 +9,8 @@ const SEEDERS_DIR = path.join(__dirname, "../../seeders");
 
 const seedService = {
   /**
-   * Inicjalizuje proces tworzenia seederów dla danego pluginu.
-   * @param {Object} plugin - Obiekt pluginu zawierający m.in. nazwę.
+   * Initializes the process of creating seeders for a given plugin.
+   * @param {Object} plugin - The plugin object containing the name.
    */
   initSeeder(plugin) {
     console.log("Initializing seeder...");
@@ -23,8 +23,8 @@ const seedService = {
   },
 
   /**
-   * Usuwa wszystkie seedy związane z danym pluginem w odwrotnej kolejności tworzenia oraz usuwa ich pliki.
-   * @param {Object} plugin - Obiekt pluginu.
+   * Removes all seeders related to a given plugin in reverse order of creation and deletes their files.
+   * @param {Object} plugin - The plugin object.
    */
   removeSeeder(plugin) {
     console.log(`Removing seeders for plugin '${plugin.name}'...`);
@@ -35,10 +35,14 @@ const seedService = {
       return;
     }
 
-    // Grupowanie seederów według modelu
+    /**
+     * Grouping seeders by model.
+     */
     const groupedSeeders = this.groupSeedersByModel(seederFiles);
 
-    // Sortowanie modeli w odwrotnej kolejności tworzenia seederów
+    /**
+     * Sorting models in reverse order of seeders creation.
+     */
     const sortedModels = Array.from(groupedSeeders.keys()).sort((a, b) => {
       const latestA = groupedSeeders.get(a).reduce((max, seeder) => {
         const timestampNum = parseInt(seeder.timestamp, 10);
@@ -51,10 +55,12 @@ const seedService = {
       return latestB - latestA;
     });
 
-    // Iteracja po posortowanych modelach i usuwanie seederów w ramach każdej grupy
+    /**
+     * Iterates through sorted models and removes seeders within each group.
+     */
     for (const model of sortedModels) {
       const seeders = groupedSeeders.get(model);
-      // Sortowanie seederów w ramach modelu w odwrotnej kolejności timestamp
+      // Sorting seeders within the model in reverse timestamp order
       seeders.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
 
       for (const { filename } of seeders) {
@@ -67,9 +73,9 @@ const seedService = {
   },
 
   /**
-   * Pobiera listę plików seederów dla danego pluginu.
-   * @param {String} pluginName - Nazwa pluginu.
-   * @returns {Array} Lista obiektów z nazwami plików i timestampami.
+   * Retrieves a list of seeder files for a given plugin.
+   * @param {String} pluginName - The name of the plugin.
+   * @returns {Array} List of objects with filenames and timestamps.
    */
   getPluginSeederFiles(pluginName) {
     try {
@@ -87,15 +93,15 @@ const seedService = {
   },
 
   /**
-   * Grupuje seederów według modelu.
-   * @param {Array} seederFiles - Lista plików seederów.
-   * @returns {Map} Mapowanie modeli do listy seederów.
+   * Groups seeders by model.
+   * @param {Array} seederFiles - List of seeder files.
+   * @returns {Map} Mapping of models to lists of seeders.
    */
   groupSeedersByModel(seederFiles) {
     return seederFiles.reduce((map, seeder) => {
       const parts = seeder.filename.split("-");
-      if (parts.length < 3) return map; // Oczekuje formatu: timestamp-pluginName-model.js
-      const modelWithExt = parts.slice(2).join("-"); // Obsługuje modele z myślnikami
+      if (parts.length < 3) return map; // Expects format: timestamp-pluginName-model.js
+      const modelWithExt = parts.slice(2).join("-"); // Handles models with dashes
       const model = path.basename(modelWithExt, ".js");
       if (!map.has(model)) map.set(model, []);
       map.get(model).push(seeder);
@@ -104,8 +110,8 @@ const seedService = {
   },
 
   /**
-   * Cofanie działania seeda za pomocą Sequelize CLI.
-   * @param {String} seederFileName - Nazwa pliku seeda.
+   * Undoes the seeder action using Sequelize CLI.
+   * @param {String} seederFileName - The name of the seeder file.
    */
   undoSeeder(seederFileName) {
     drawFrame(`Uninstalling seeder '${seederFileName}'`, "REM");
@@ -120,8 +126,8 @@ const seedService = {
   },
 
   /**
-   * Usuwa plik seeda z systemu plików.
-   * @param {String} seederFileName - Nazwa pliku seeda.
+   * Deletes the seeder file from the file system.
+   * @param {String} seederFileName - The name of the seeder file.
    */
   deleteSeederFile(seederFileName) {
     const seederFilePath = path.join(SEEDERS_DIR, seederFileName);
@@ -138,9 +144,9 @@ const seedService = {
   },
 
   /**
-   * Grupuje dane inicjalizacyjne według modelu.
-   * @param {Array} initData - Dane inicjalizacyjne z _init.json.
-   * @returns {Map} Grupowane dane według modelu.
+   * Groups initialization data by model.
+   * @param {Array} initData - Initialization data from _init.json.
+   * @returns {Map} Grouped data by model.
    */
   groupDataByModel(initData) {
     return initData.reduce((map, item) => {
@@ -152,9 +158,9 @@ const seedService = {
   },
 
   /**
-   * Przetwarza grupowane dane modeli i tworzy seedy.
-   * @param {Map} groupedData - Grupowane dane według modelu.
-   * @param {Object} plugin - Obiekt pluginu.
+   * Processes grouped model data and creates seeders.
+   * @param {Map} groupedData - Grouped data by model.
+   * @param {Object} plugin - The plugin object.
    */
   processGroupedData(groupedData, plugin) {
     const pluginSchemasPath = path.join(__dirname, "../../src/plugins/", plugin.name, "seedSlug", "schemas");
@@ -174,9 +180,9 @@ const seedService = {
   },
 
   /**
-   * Przetwarza pojedynczy rekord danych.
-   * @param {Object} item - Pojedynczy rekord danych.
-   * @param {Object} plugin - Obiekt pluginu.
+   * Processes a single data record.
+   * @param {Object} item - A single data record.
+   * @param {Object} plugin - The plugin object.
    */
   processItem(item, plugin) {
     if (item.data?.slug && item.data?.content) {
@@ -192,9 +198,9 @@ const seedService = {
   },
 
   /**
-   * Dodaje zawartość z pliku JSON do rekordu danych.
-   * @param {Object} item - Pojedynczy rekord danych.
-   * @param {String} jsonFilePath - Ścieżka do pliku JSON.
+   * Adds content from a JSON file to a data record.
+   * @param {Object} item - A single data record.
+   * @param {String} jsonFilePath - Path to the JSON file.
    */
   addContentFromJsonFile(item, jsonFilePath) {
     if (fs.existsSync(jsonFilePath)) {
@@ -211,10 +217,10 @@ const seedService = {
   },
 
   /**
-   * Dodaje dane do schematu seeda.
-   * @param {String} schema - Zawartość pliku schematu.
-   * @param {Array} data - Dane do dodania.
-   * @returns {String} Zmodyfikowany schemat.
+   * Adds data to the seeder schema.
+   * @param {String} schema - The contents of the schema file.
+   * @param {Array} data - The data to add.
+   * @returns {String} The modified schema.
    */
   addDataToSchema(schema, data) {
     return schema.replace(
@@ -224,10 +230,10 @@ const seedService = {
   },
 
   /**
-   * Zapisuje zmodyfikowany schemat seeda do pliku.
-   * @param {String} seederPath - Ścieżka do katalogu seederów.
-   * @param {String} seederFileName - Nazwa pliku seeda.
-   * @param {String} schema - Zawartość schematu seeda.
+   * Saves the modified seeder schema to a file.
+   * @param {String} seederPath - Path to the seeders directory.
+   * @param {String} seederFileName - The name of the seeder file.
+   * @param {String} schema - The contents of the seeder schema.
    */
   saveModifiedSchema(seederPath, seederFileName, schema) {
     file.writeTextFile(seederPath, seederFileName, schema);
@@ -235,8 +241,8 @@ const seedService = {
   },
 
   /**
-   * Uruchamia seeda za pomocą Sequelize CLI.
-   * @param {String} seederFileName - Nazwa pliku seeda.
+   * Runs the seeder using Sequelize CLI.
+   * @param {String} seederFileName - The name of the seeder file.
    */
   runSeeder(seederFileName) {
     const command = `npx sequelize-cli db:seed --seed ${seederFileName}`;
@@ -249,9 +255,9 @@ const seedService = {
   },
 
   /**
-   * Ładuje plik inicjalizacyjny _init.json dla danego pluginu.
-   * @param {Object} plugin - Obiekt pluginu.
-   * @returns {Array|null} Dane inicjalizacyjne lub null w przypadku błędu.
+   * Loads the initialization file _init.json for a given plugin.
+   * @param {Object} plugin - The plugin object.
+   * @returns {Array|null} Initialization data or null in case of error.
    */
   loadInitFile(plugin) {
     const initFilePath = path.join(__dirname, "../../src/plugins", plugin.name, "seedSlug", "_init.json");

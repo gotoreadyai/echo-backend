@@ -15,7 +15,7 @@ import { saveData } from "./controllers/seedController";
 
 /* #PLUGINS IMPORTS */
 import SchoolDaze from "./plugins/schoolDaze/Routes";
-import JWTauth from "./plugins/JWTauth/Routes";
+import _JWTauth from "./plugins/_JWTauth/Routes";
 import schoolDaze from "./plugins/schoolDaze/Routes";
 import openAI from "./plugins/openAI/Routes";
 /* !#PLUGINS IMPORTS */
@@ -36,7 +36,7 @@ app.post("/seed", saveData);
 
 /* #PLUGINS */
 app.use(SchoolDaze);
-app.use(JWTauth);
+app.use(_JWTauth);
 app.use(schoolDaze);
 app.use(openAI);
 /* !#PLUGINS */
