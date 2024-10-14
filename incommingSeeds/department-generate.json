@@ -1,0 +1,277 @@
+{
+  "0": "{",
+  "1": "}",
+  "_sideStatic": [
+    {
+      "id": "39084d86-5e72-4f9f-9fc9-b316dee4c0f9",
+      "data": {
+        "className": "px-md inline-block"
+      },
+      "filename": "Logo"
+    },
+    {
+      "id": "6c7d8e9f-0a1b-2c3d-4e5f-6a7b8c9d0e1f",
+      "data": {
+        "to": "/books/workspaces/",
+        "name": "P.Robocze",
+        "wide": true,
+        "variant": "btn-hairline w-full"
+      },
+      "filename": "Link"
+    },
+    {
+      "id": "7d8e9f0a-1b2c-3d4e-5f6a-7b8c9d0e1f2a",
+      "data": {
+        "to": "/books/documents/",
+        "name": "Strony",
+        "wide": true,
+        "variant": "btn-hairline w-full"
+      },
+      "filename": "Link"
+    },
+    {
+      "id": "7d8e9f0a-1b2c-3d4e-5f6a-7b8c9d0e1f2a",
+      "data": {
+        "to": "/books/callingfunctions/",
+        "name": "Funkcje AI",
+        "wide": true,
+        "variant": "btn-hairline w-full"
+      },
+      "filename": "Link"
+    },
+    {
+      "id": "7d8e9f0a-1b2c-3d4e-5f6a-7b8c9d0e1f2a",
+      "data": {
+        "to": "/books/permissions/",
+        "name": "Uprawnienia",
+        "wide": true,
+        "variant": "btn-hairline w-full"
+      },
+      "filename": "Link"
+    },
+    {
+      "id": "65a50829-a17f-463c-9d69-26f8f07319bc",
+      "data": {
+        "to": "/books/users/",
+        "name": "Użytkownicy",
+        "wide": true,
+        "variant": "btn-hairline w-full"
+      },
+      "filename": "Link"
+    },
+    {
+      "id": "8cd07d91-87ea-4860-a99f-b21ebe9b09a6",
+      "data": {
+        "to": "/books/schools/",
+        "name": "Typy szkół",
+        "wide": true,
+        "variant": "btn-hairline w-full"
+      },
+      "filename": "Link"
+    },
+    {
+      "id": "7b31d426-fe5c-46f7-bd74-b6a3c21a0566",
+      "data": {
+        "to": "/books/courselevels/",
+        "name": "Poziomy nauczania",
+        "wide": true,
+        "variant": "btn-hairline w-full"
+      },
+      "filename": "Link"
+    },
+    {
+      "id": "95ca4186-b91d-4adf-a02e-6f967afbd8dd",
+      "data": {
+        "to": "/books/subjects/",
+        "name": "Przedmioty",
+        "wide": true,
+        "variant": "btn-hairline w-full"
+      },
+      "filename": "Link"
+    },
+    {
+      "id": "c1863da2-cee9-4713-a449-93318d84ab06",
+      "data": {
+        "to": "/books/departments/",
+        "name": "Działy",
+        "wide": true,
+        "variant": "btn-hairline w-full"
+      },
+      "filename": "Link"
+    },
+    {
+      "id": "f6eb7602-02b4-4eb5-a4ad-7520a01eb7d1",
+      "data": {
+        "to": "/books/textbooks/",
+        "name": "Podręczniki",
+        "wide": true,
+        "variant": "btn-hairline w-full"
+      },
+      "filename": "Link"
+    },
+    {
+      "id": "8e709a8f-934f-4b58-925b-888ba7d1bd45",
+      "data": {
+        "to": "/books/topics/",
+        "name": "Tematy",
+        "wide": true,
+        "variant": "btn-hairline w-full"
+      },
+      "filename": "Link"
+    },
+    {
+      "id": "d4e5cf75-7a59-4260-b5c4-65e318c6c6a6",
+      "data": {
+        "to": "/books/lessonstrategies/",
+        "name": "Strategie",
+        "wide": true,
+        "variant": "btn-hairline w-full"
+      },
+      "filename": "Link"
+    }
+  ],
+  "primaryContent": [
+    {
+      "id": "dbfa4ee7-87c0-4e1e-bdb0-fa0722c3a8e6",
+      "data": {
+        "actions": [
+          {
+            "scope": "callingFunction",
+            "action": "FetchItemAction"
+          },
+          {
+            "scope": "schools",
+            "action": "FetchItemsAction"
+          },
+          {
+            "scope": "courseLevels",
+            "action": "FetchItemsAction"
+          },
+          {
+            "scope": "departments",
+            "action": "FetchItemsAction"
+          },
+          {
+            "scope": "subjects",
+            "action": "FetchItemsAction"
+          }
+        ],
+        "options": [],
+        "reloadOnParamsChange": true
+      },
+      "filename": "ActionBlock"
+    }
+  ],
+  "tertiaryContent": [
+    {
+      "id": "f10fbaf5-6048-4fe8-a1c1-cd5ec3061ca9",
+      "data": {
+        "text": "Generowanie zagadnien",
+        "actions": [],
+        "options": [],
+        "variant": "hero",
+        "className": "p-md",
+        "reloadOnParamsChange": false
+      },
+      "filename": "HeadingText"
+    },
+    {
+      "id": "df31a012-eb95-4264-ab3f-0bac9b3e5691",
+      "data": {
+        "label": "Funkcja AI",
+        "actions": [],
+        "readonly": true,
+        "className": "px-md pb-md",
+        "fieldName": "callingFunction.title",
+        "reloadOnParamsChange": false
+      },
+      "filename": "InputBlock"
+    },
+    {
+      "id": "4206e19e-0853-446f-b24f-196d82e5e487",
+      "data": {
+        "label": "Tworzenie strategii dla",
+        "scope": "schools.items",
+        "options": [],
+        "pushName": false,
+        "className": "px-md",
+        "fieldName": "callingFunction.function.function_call.arguments.SubjectId",
+        "filterName": "filters.courseLevels.where.schoolId"
+      },
+      "filename": "SelectBlock"
+    },
+    {
+      "id": "b0a1c0f0-86f1-4f0f-a0d0-f5458ab05c7b",
+      "data": {
+        "options": [],
+        "label": "",
+        "scope": "courseLevels.items",
+        "pushName": true,
+        "className": "px-md",
+        "fieldName": "callingFunction.function.function_call.arguments.courseLevels",
+        "filterName": "filters.textbooks.where.courseLevelId"
+      },
+      "filename": "SelectBlock"
+    },
+    {
+      "id": "8a87315f-a3cc-4c41-92f7-bd259601c0ea",
+      "data": {
+        "label": "",
+        "scope": "subjects.items",
+        "options": [],
+        "pushName": true,
+        "className": "px-md",
+        "fieldName": "",
+        "filterName": "filters.departments.where.subjectId"
+      },
+      "filename": "SelectBlock"
+    },
+    {
+      "id": "41c3f2a7-4bf5-4a9e-b021-818b36ccad8d",
+      "data": {
+        "label": "",
+        "scope": "departments.items",
+        "options": [],
+        "pushName": true,
+        "className": "px-md pb-md",
+        "fieldName": "",
+        "filterName": "filters.textbooks.where.departmentId"
+      },
+      "filename": "SelectBlock"
+    },
+    {
+      "id": "3b293011-4b76-4683-a9a2-54bd4c8da6fb",
+      "data": {
+        "label": "Wiadomość systemowa",
+        "options": [],
+        "readonly": true,
+        "className": "px-md pb-md",
+        "fieldName": "callingFunction.function.system"
+      },
+      "filename": "InputBlock"
+    },
+    {
+      "id": "26e7b00c-9324-4f1d-a1c3-8b869923a138",
+      "data": {
+        "rows": 2,
+        "label": "Wiadomość inicjująca proces",
+        "actions": [],
+        "options": [],
+        "className": "px-md pb-md",
+        "fieldName": "callingFunction.function.user",
+        "reloadOnParamsChange": false
+      },
+      "filename": "TextAreaBlock"
+    },
+    {
+      "id": "af80c565-1f53-473d-8b9e-f7a601ec62e0",
+      "data": {
+        "actions": [],
+        "className": "px-md pb-md",
+        "reloadOnParamsChange": false
+      },
+      "filename": "SubmitForm"
+    }
+  ],
+  "secondaryContent": []
+}

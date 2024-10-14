@@ -1,0 +1,182 @@
+{
+  "_sideStatic": [
+    {
+      "id": "39084d86-5e72-4f9f-9fc9-b316dee4c0f9",
+      "data": {
+        "className": "px-md inline-block"
+      },
+      "filename": "Logo"
+    },
+    {
+      "id": "6c7d8e9f-0a1b-2c3d-4e5f-6a7b8c9d0e1f",
+      "data": {
+        "to": "/books/workspaces/",
+        "name": "Workspaces",
+        "wide": true,
+        "variant": "btn-hairline w-full"
+      },
+      "filename": "Link"
+    },
+    {
+      "id": "7d8e9f0a-1b2c-3d4e-5f6a-7b8c9d0e1f2a",
+      "data": {
+        "to": "/books/documents/",
+        "name": "Documents",
+        "wide": true,
+        "variant": "btn-hairline w-full"
+      },
+      "filename": "Link"
+    },
+    {
+      "id": "65a50829-a17f-463c-9d69-26f8f07319bc",
+      "data": {
+        "to": "/books/users/",
+        "name": "Users",
+        "wide": true,
+        "variant": "btn-hairline w-full"
+      },
+      "filename": "Link"
+    },
+    {
+      "id": "8cd07d91-87ea-4860-a99f-b21ebe9b09a6",
+      "data": {
+        "to": "/books/schools/",
+        "name": "Schools",
+        "wide": true,
+        "variant": "btn-hairline w-full"
+      },
+      "filename": "Link"
+    },
+    {
+      "id": "95ca4186-b91d-4adf-a02e-6f967afbd8dd",
+      "data": {
+        "to": "/books/subjects/",
+        "name": "Subjects",
+        "wide": true,
+        "variant": "btn-hairline w-full"
+      },
+      "filename": "Link"
+    },
+    {
+      "id": "c1863da2-cee9-4713-a449-93318d84ab06",
+      "data": {
+        "to": "/books/departments/",
+        "name": "Department",
+        "wide": true,
+        "variant": "btn-hairline w-full"
+      },
+      "filename": "Link"
+    },
+    {
+      "id": "f6eb7602-02b4-4eb5-a4ad-7520a01eb7d1",
+      "data": {
+        "to": "/books/textbooks/",
+        "name": "Books",
+        "wide": true,
+        "variant": "btn-hairline w-full"
+      },
+      "filename": "Link"
+    },
+    {
+      "id": "8e709a8f-934f-4b58-925b-888ba7d1bd45",
+      "data": {
+        "to": "/books/topics/",
+        "name": "Topics",
+        "wide": true,
+        "variant": "btn-hairline w-full"
+      },
+      "filename": "Link"
+    },
+    {
+      "id": "7b31d426-fe5c-46f7-bd74-b6a3c21a0566",
+      "data": {
+        "to": "/books/courselevels/",
+        "name": "Course levels",
+        "wide": true,
+        "variant": "btn-hairline w-full"
+      },
+      "filename": "Link"
+    },
+    {
+      "id": "d4e5cf75-7a59-4260-b5c4-65e318c6c6a6",
+      "data": {
+        "to": "/books/lessonstrategies/",
+        "name": "Lesson strategies",
+        "wide": true,
+        "variant": "btn-hairline w-full"
+      },
+      "filename": "Link"
+    }
+  ],
+  "primaryContent": [
+    {
+      "id": "x4y5z6a7-8901-2w78-9012-abcdef0123456789",
+      "data": {
+        "actions": [
+          {
+            "scope": "subjects",
+            "action": "FetchItemsAction"
+          }
+        ],
+        "repeater": [],
+        "reloadOnParamsChange": true
+      },
+      "filename": "ActionBlock"
+    }
+  ],
+  "tertiaryContent": [
+    {
+      "id": "y5z6a7b8-9012-3x89-0123-abcdef0123456789",
+      "data": {
+        "text": "Lista Przedmiotów",
+        "actions": [],
+        "variant": "hero",
+        "className": "p-md",
+        "reloadOnParamsChange": false
+      },
+      "filename": "HeadingText"
+    },
+    {
+      "id": "z6a7b8c9-0123-4y90-1234-bcdef0123456789a",
+      "data": {
+        "url": "/books/subject-edit/?filters.subject.id={id}",
+        "path": "subjects.items",
+        "actions": [
+          {
+            "url": "/books/subject-edit/?filters.subject.id={id}",
+            "icon": "edit"
+          },
+          {
+            "url": "/books/subject-delete/?filters.subject.id={id}",
+            "icon": "trash"
+          },
+          {
+            "url": "/books/{_slug}",
+            "icon": "file"
+          }
+        ],
+        "repeater": [
+          {
+            "key": "name",
+            "label": "Nazwa Przedmiotu"
+          }
+        ],
+        "className": "pb-lg",
+        "reloadOnParamsChange": false
+      },
+      "filename": "ListTableBlock"
+    }
+  ],
+  "secondaryContent": [
+    {
+      "id": "a7b8c9d0-1234-5z01-2345-cdef0123456789ab",
+      "data": {
+        "to": "/books/subject-create",
+        "name": "Utwórz nowy przedmiot",
+        "outline": true,
+        "className": "p-md"
+      },
+      "filename": "Link"
+    }
+  ]
+}

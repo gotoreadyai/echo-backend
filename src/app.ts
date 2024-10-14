@@ -15,6 +15,7 @@ import { saveData } from "./controllers/seedController";
 
 /* #PLUGINS IMPORTS */
 import SchoolDaze from "./plugins/schoolDaze/Routes";
+import { printMemoryUsage } from "./utils/memoryUsage";
 import _JWTauth from "./plugins/_JWTauth/Routes";
 import schoolDaze from "./plugins/schoolDaze/Routes";
 import openAI from "./plugins/openAI/Routes";
@@ -45,6 +46,8 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 3000;
 
 listRoutes(app);
+printMemoryUsage()
+
 sequelize
   .sync()
   .then(() => {

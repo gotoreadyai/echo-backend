@@ -1,0 +1,155 @@
+{
+  "_sideStatic": [
+    {
+      "id": "39084d86-5e72-4f9f-9fc9-b316dee4c0f9",
+      "data": {},
+      "filename": "Logo"
+    },
+    {
+      "id": "6c7d8e9f-0a1b-2c3d-4e5f-6a7b8c9d0e1f",
+      "data": {
+        "to": "/dashboard/workspaces/",
+        "name": "Workspaces",
+        "wide": true
+      },
+      "filename": "Link"
+    },
+    {
+      "id": "7d8e9f0a-1b2c-3d4e-5f6a-7b8c9d0e1f2a",
+      "data": {
+        "to": "/dashboard/documents/",
+        "name": "Documents",
+        "wide": true
+      },
+      "filename": "Link"
+    },
+    {
+      "id": "65a50829-a17f-463c-9d69-26f8f07319bc",
+      "data": {
+        "to": "/dashboard/users/",
+        "name": "Users",
+        "wide": true
+      },
+      "filename": "Link"
+    }
+  ],
+  "primaryContent": [
+    {
+      "id": "474f1990-c107-4fba-9c70-a0c267276533",
+      "data": {
+        "actions": [
+          {
+            "scope": "workspaces",
+            "action": "FetchItemsAction"
+          },
+          {
+            "scope": "documents",
+            "action": "FetchItemsAction"
+          }
+        ],
+        "repeater": [],
+        "reloadOnParamsChange": true
+      },
+      "filename": "ActionBlock"
+    }
+  ],
+  "tertiaryContent": [
+    {
+      "id": "6daccb8f-7df6-4d54-8257-556815af0609",
+      "data": {
+        "text": "Lista stron",
+        "variant": "hero",
+        "className": "p-md"
+      },
+      "filename": "HeadingText"
+    },
+    {
+      "id": "7d16f02c-0fe8-4589-acb6-054ac044def9",
+      "data": {
+        "url": "/dashboard/document-edit/?filters.document.id={id}",
+        "path": "documents.items",
+        "actions": [
+          {
+            "url": "/{Workspace.slug}/{slug}",
+            "icon": "file"
+          },
+          {
+            "url": "/dashboard/document-edit/?filters.document.id={id}",
+            "icon": "edit"
+          },
+          {
+            "url": "/dashboard/document-delete/?filters.document.id={id}",
+            "icon": "trash"
+          }
+        ],
+        "repeater": [
+          {
+            "key": "title",
+            "label": "Tytuł"
+          },
+          {
+            "key": "slug",
+            "label": "Odnośnik"
+          },
+          {
+            "key": "Workspace.slug",
+            "label": "Obszar roboczy"
+          },
+          {
+            "key": "plugin",
+            "label": "Plugin"
+          }
+        ],
+        "className": "pb-lg",
+        "reloadOnParamsChange": false
+      },
+      "filename": "ListTableBlock"
+    },
+    {
+      "id": "c03affb5-5b5a-4dcd-99ef-b02a1007a6ba",
+      "data": {
+        "scope": "documents",
+        "actions": [],
+        "repeater": [],
+        "className": "pb-lg p-md",
+        "filterName": "filters.documents.page"
+      },
+      "filename": "PaginationBlock"
+    }
+  ],
+  "secondaryContent": [
+    {
+      "id": "e55aa3b0-4206-41a4-ae76-a6bfc9b545e1",
+      "data": {
+        "label": "",
+        "scope": "workspaces.items",
+        "options": [],
+        "className": "flex-1 py-md pl-md",
+        "fieldName": "",
+        "filterName": "filters.documents.where.workspaceId"
+      },
+      "filename": "SelectBlock"
+    },
+    {
+      "id": "45960490-b9b8-4ea0-9eb4-22d485342c1f",
+      "data": {
+        "to": "/dashboard/workspaces/",
+        "name": "Powrót od listy obszarów roboczych",
+        "options": [],
+        "outline": false,
+        "className": "p-md"
+      },
+      "filename": "Link"
+    },
+    {
+      "id": "d76498f1-ab6a-4b43-860e-f6c1db27c55d",
+      "data": {
+        "to": "/dashboard/document-create/",
+        "name": "Utwórz nową stronę",
+        "outline": true,
+        "className": "py-md pr-md"
+      },
+      "filename": "Link"
+    }
+  ]
+}
