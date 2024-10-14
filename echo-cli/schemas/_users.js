@@ -1,6 +1,7 @@
 "use strict";
 const { v4: uuidv4 } = require("uuid");
 const records = [];
+const plugin = "";
 
 const record = (record) => {
   return {

@@ -1,135 +1,4 @@
 {
-  "0": "{",
-  "1": "}",
-  "_sideStatic": [
-    {
-      "id": "39084d86-5e72-4f9f-9fc9-b316dee4c0f9",
-      "data": {
-        "className": "px-md inline-block"
-      },
-      "filename": "Logo"
-    },
-    {
-      "id": "6c7d8e9f-0a1b-2c3d-4e5f-6a7b8c9d0e1f",
-      "data": {
-        "to": "/books/workspaces/",
-        "name": "P.Robocze",
-        "wide": true,
-        "variant": "btn-hairline w-full"
-      },
-      "filename": "Link"
-    },
-    {
-      "id": "7d8e9f0a-1b2c-3d4e-5f6a-7b8c9d0e1f2a",
-      "data": {
-        "to": "/books/documents/",
-        "name": "Strony",
-        "wide": true,
-        "variant": "btn-hairline w-full"
-      },
-      "filename": "Link"
-    },
-    {
-      "id": "7d8e9f0a-1b2c-3d4e-5f6a-7b8c9d0e1f2a",
-      "data": {
-        "to": "/books/callingfunctions/",
-        "name": "Funkcje AI",
-        "wide": true,
-        "variant": "btn-hairline w-full"
-      },
-      "filename": "Link"
-    },
-    {
-      "id": "7d8e9f0a-1b2c-3d4e-5f6a-7b8c9d0e1f2a",
-      "data": {
-        "to": "/books/permissions/",
-        "name": "Uprawnienia",
-        "wide": true,
-        "variant": "btn-hairline w-full"
-      },
-      "filename": "Link"
-    },
-    {
-      "id": "65a50829-a17f-463c-9d69-26f8f07319bc",
-      "data": {
-        "to": "/books/users/",
-        "name": "Użytkownicy",
-        "wide": true,
-        "variant": "btn-hairline w-full"
-      },
-      "filename": "Link"
-    },
-    {
-      "id": "8cd07d91-87ea-4860-a99f-b21ebe9b09a6",
-      "data": {
-        "to": "/books/schools/",
-        "name": "Typy szkół",
-        "wide": true,
-        "variant": "btn-hairline w-full"
-      },
-      "filename": "Link"
-    },
-    {
-      "id": "7b31d426-fe5c-46f7-bd74-b6a3c21a0566",
-      "data": {
-        "to": "/books/courselevels/",
-        "name": "Poziomy nauczania",
-        "wide": true,
-        "variant": "btn-hairline w-full"
-      },
-      "filename": "Link"
-    },
-    {
-      "id": "95ca4186-b91d-4adf-a02e-6f967afbd8dd",
-      "data": {
-        "to": "/books/subjects/",
-        "name": "Przedmioty",
-        "wide": true,
-        "variant": "btn-hairline w-full"
-      },
-      "filename": "Link"
-    },
-    {
-      "id": "c1863da2-cee9-4713-a449-93318d84ab06",
-      "data": {
-        "to": "/books/departments/",
-        "name": "Działy",
-        "wide": true,
-        "variant": "btn-hairline w-full"
-      },
-      "filename": "Link"
-    },
-    {
-      "id": "f6eb7602-02b4-4eb5-a4ad-7520a01eb7d1",
-      "data": {
-        "to": "/books/textbooks/",
-        "name": "Podręczniki",
-        "wide": true,
-        "variant": "btn-hairline w-full"
-      },
-      "filename": "Link"
-    },
-    {
-      "id": "8e709a8f-934f-4b58-925b-888ba7d1bd45",
-      "data": {
-        "to": "/books/topics/",
-        "name": "Tematy",
-        "wide": true,
-        "variant": "btn-hairline w-full"
-      },
-      "filename": "Link"
-    },
-    {
-      "id": "d4e5cf75-7a59-4260-b5c4-65e318c6c6a6",
-      "data": {
-        "to": "/books/lessonstrategies/",
-        "name": "Strategie",
-        "wide": true,
-        "variant": "btn-hairline w-full"
-      },
-      "filename": "Link"
-    }
-  ],
   "primaryContent": [
     {
       "id": "dbfa4ee7-87c0-4e1e-bdb0-fa0722c3a8e6",
@@ -166,7 +35,7 @@
     {
       "id": "f10fbaf5-6048-4fe8-a1c1-cd5ec3061ca9",
       "data": {
-        "text": "Generowanie zagadnien",
+        "text": "Generowanie zagadnień",
         "actions": [],
         "options": [],
         "variant": "hero",
@@ -203,9 +72,9 @@
     {
       "id": "b0a1c0f0-86f1-4f0f-a0d0-f5458ab05c7b",
       "data": {
-        "options": [],
         "label": "",
         "scope": "courseLevels.items",
+        "options": [],
         "pushName": true,
         "className": "px-md",
         "fieldName": "callingFunction.function.function_call.arguments.courseLevels",

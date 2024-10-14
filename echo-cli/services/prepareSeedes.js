@@ -81,8 +81,10 @@ const seedService = {
     try {
       const allFiles = fs.readdirSync(SEEDERS_DIR);
       return allFiles
-        .filter(file => file.includes(`-${pluginName}-`) && file.endsWith(".js"))
-        .map(file => {
+        .filter(
+          (file) => file.includes(`-${pluginName}-`) && file.endsWith(".js")
+        )
+        .map((file) => {
           const timestamp = file.split("-")[0];
           return { filename: file, timestamp };
         });
@@ -134,7 +136,9 @@ const seedService = {
     if (fs.existsSync(seederFilePath)) {
       try {
         fs.unlinkSync(seederFilePath);
-        msg.exeOK({ name: `Seeder file '${seederFileName}' deleted successfully.` });
+        msg.exeOK({
+          name: `Seeder file '${seederFileName}' deleted successfully.`,
+        });
       } catch (error) {
         console.error(`Error deleting seeder file '${seederFileName}':`, error);
       }
@@ -163,17 +167,31 @@ const seedService = {
    * @param {Object} plugin - The plugin object.
    */
   processGroupedData(groupedData, plugin) {
-    const pluginSchemasPath = path.join(__dirname, "../../src/plugins/", plugin.name, "seedSlug", "schemas");
+    const pluginSchemasPath = path.join(
+      __dirname,
+      "../../src/plugins/",
+      plugin.name,
+      "seedSlug",
+      "schemas"
+    );
     const schemasPath = path.join(__dirname, "../schemas");
 
     groupedData.forEach((data, model) => {
-      drawFrame(`Processing model '${model}' with ${data.length} records`, "INI");
-      data.forEach(item => this.processItem(item, plugin));
+      drawFrame(
+        `Processing model '${model}' with ${data.length} records`,
+        "INI"
+      );
+      data.forEach((item) => this.processItem(item, plugin));
 
-      let schema = file.readTextFile(pluginSchemasPath ? pluginSchemasPath : schemasPath, `_${model}.js`);
-      schema = this.addDataToSchema(schema, data);
+      let schema = file.readTextFile(
+        pluginSchemasPath ? pluginSchemasPath : schemasPath,
+        `_${model}.js`
+      );
+      schema = this.addDataToSchema(schema, data, plugin.name);
 
-      const seederFileName = `${generateTimestamp()}-${plugin.name}-${model}.js`;
+      const seederFileName = `${generateTimestamp()}-${
+        plugin.name
+      }-${model}.js`;
       this.saveModifiedSchema(SEEDERS_DIR, seederFileName, schema);
       this.runSeeder(seederFileName);
     });
@@ -207,9 +225,15 @@ const seedService = {
       try {
         const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, "utf8"));
         item.data.content = { ...item.data.content, ...jsonData };
-        drawFrame(`Added data from ${path.basename(jsonFilePath)} to content.`, "ADD");
+        drawFrame(
+          `Added data from ${path.basename(jsonFilePath)} to content.`,
+          "ADD"
+        );
       } catch (error) {
-        console.error(`Error parsing JSON from ${path.basename(jsonFilePath)}:`, error);
+        console.error(
+          `Error parsing JSON from ${path.basename(jsonFilePath)}:`,
+          error
+        );
       }
     } else {
       console.warn(`JSON file ${path.basename(jsonFilePath)} not found.`);
@@ -220,13 +244,17 @@ const seedService = {
    * Adds data to the seeder schema.
    * @param {String} schema - The contents of the schema file.
    * @param {Array} data - The data to add.
+   * @param {String} pluginName - The plugin name.
    * @returns {String} The modified schema.
    */
-  addDataToSchema(schema, data) {
-    return schema.replace(
-      /const records = \[\];/,
-      `const records = ${JSON.stringify(data, null, 2)};`
-    );
+
+  addDataToSchema(schema, data, pluginName) {
+    return schema
+      .replace(
+        /const records = \[\];/,
+        `const records = ${JSON.stringify(data, null, 2)};`
+      )
+      .replace(/const plugin = "";/, `const plugin = "${pluginName}";`);
   },
 
   /**
@@ -237,7 +265,9 @@ const seedService = {
    */
   saveModifiedSchema(seederPath, seederFileName, schema) {
     file.writeTextFile(seederPath, seederFileName, schema);
-    msg.exeOK({ name: `Seeder file '${seederFileName}' created successfully.` });
+    msg.exeOK({
+      name: `Seeder file '${seederFileName}' created successfully.`,
+    });
   },
 
   /**
@@ -260,8 +290,17 @@ const seedService = {
    * @returns {Array|null} Initialization data or null in case of error.
    */
   loadInitFile(plugin) {
-    const initFilePath = path.join(__dirname, "../../src/plugins", plugin.name, "seedSlug", "_init.json");
-    const initData = file.readJsonFile(path.dirname(initFilePath), path.basename(initFilePath));
+    const initFilePath = path.join(
+      __dirname,
+      "../../src/plugins",
+      plugin.name,
+      "seedSlug",
+      "_init.json"
+    );
+    const initData = file.readJsonFile(
+      path.dirname(initFilePath),
+      path.basename(initFilePath)
+    );
 
     if (initData) {
       console.log("The _init.json file was successfully loaded.");
