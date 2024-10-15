@@ -49,7 +49,6 @@ CallingFunction.init(
     },
     plugin: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     ownerId: {
       type: DataTypes.UUID,

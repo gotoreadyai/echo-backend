@@ -17,6 +17,7 @@ export const verifyOwnership = <T extends Model>(
       }
 
       if (userRole === 'admin') {
+        // Admin users have access to all resources
         return next();
       }
 

@@ -11,14 +11,15 @@ import {
 } from "./models";
 import { errorHandler } from "./middleware/errorHandler";
 import { listRoutes } from "./utils/listRotues";
-import { saveData } from "./controllers/seedController";
+import { saveFiles } from "./controllers/seedFileController";
 
 /* #PLUGINS IMPORTS */
-import SchoolDaze from "./plugins/schoolDaze/Routes";
 import { printMemoryUsage } from "./utils/memoryUsage";
 import _JWTauth from "./plugins/_JWTauth/Routes";
-import schoolDaze from "./plugins/schoolDaze/Routes";
 import openAI from "./plugins/openAI/Routes";
+import schoolDazeAI from "./plugins/schoolDazeAI/Routes";
+import schoolDaze from "./plugins/schoolDaze/Routes";
+import schoolDazeContent from "./plugins/schoolDazeContent/Routes";
 /* !#PLUGINS IMPORTS */
 
 const app = express();
@@ -33,20 +34,33 @@ app.use(createCrudRoutes(Permission, "permission"));
 app.use(createSlugRoutes(Workspace, "workspace"));
 app.use(createSlugRoutes(Document, "document"));
 
-app.post("/seed", saveData);
+/* create content as a seed file inside plugin*/
+app.post("/seed", saveFiles);
 
 /* #PLUGINS */
-app.use(SchoolDaze);
 app.use(_JWTauth);
-app.use(schoolDaze);
 app.use(openAI);
+app.use(schoolDazeAI);
+app.use(schoolDaze);
+app.use(schoolDazeContent);
 /* !#PLUGINS */
+
+
+listRoutes(app);
+printMemoryUsage();
+
+// Tutaj dodajesz "catch-all" dla nieistniejących tras
+app.use((req, res, next) => {
+  const error = new Error(`Cannot ${req.method} ${req.originalUrl}`);
+  // Przypisujemy status jako właściwość obiektu
+  (error as any).status = 404;
+  next(error);
+});
 
 app.use(errorHandler);
 const PORT = process.env.PORT || 3000;
 
-listRoutes(app);
-printMemoryUsage()
+
 
 sequelize
   .sync()
