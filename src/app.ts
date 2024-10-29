@@ -17,9 +17,10 @@ import { saveFiles } from "./controllers/seedFileController";
 import { printMemoryUsage } from "./utils/memoryUsage";
 import _JWTauth from "./plugins/_JWTauth/Routes";
 import openAI from "./plugins/openAI/Routes";
-import schoolDazeAI from "./plugins/schoolDazeAI/Routes";
+import _GoogleAuth from "./plugins/_GoogleAuth/Routes";
 import schoolDaze from "./plugins/schoolDaze/Routes";
 import schoolDazeContent from "./plugins/schoolDazeContent/Routes";
+import schoolDazeAI from "./plugins/schoolDazeAI/Routes";
 /* !#PLUGINS IMPORTS */
 
 const app = express();
@@ -40,9 +41,10 @@ app.post("/seed", saveFiles);
 /* #PLUGINS */
 app.use(_JWTauth);
 app.use(openAI);
-app.use(schoolDazeAI);
+app.use(_GoogleAuth);
 app.use(schoolDaze);
 app.use(schoolDazeContent);
+app.use(schoolDazeAI);
 /* !#PLUGINS */
 
 

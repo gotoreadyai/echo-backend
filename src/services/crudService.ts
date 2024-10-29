@@ -50,6 +50,18 @@ export const create = async <T extends Model>(
   return (await model.create(data)) as T;
 };
 
+export const createBulk = async <T extends Model>(
+  model: ModelStatic<T>,
+  data: T["_creationAttributes"][]
+): Promise<T[]> => {
+  const itemsWithOwnerId = data.map(item => ({
+    ...item,
+    ownerId: item.ownerId, // Assuming ownerId is included in the data
+  }));
+
+  return await model.bulkCreate(itemsWithOwnerId) as T[];
+};
+
 export const update = async <T extends Model>(
   model: ModelStatic<T>,
   id: string,

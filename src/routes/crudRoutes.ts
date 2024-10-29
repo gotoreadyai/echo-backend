@@ -22,12 +22,21 @@ const createCrudRoutes = <T extends Model>(
     crudController.updateOne(model, modelName)
   );
 
+
+
   router.delete(
     `/${modelName}/:id`,
     verifyToken,
     verifyOwnership(model),
     crudController.deleteOne(model, modelName)
   );
+
+  router.put(
+    `/${pluralizedName}/bulk/`,
+    verifyToken,
+    verifyOwnership(model),
+    crudController.createBulk(model)
+  )
 
   return router;
 };

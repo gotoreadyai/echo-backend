@@ -5,9 +5,9 @@ interface UserAttributes {
   id: string;
   email: string;
   password: string;
-  firstName?: string;
-  lastName?: string;
-  role: "user" | "teacher" | "student" | "admin"; 
+  googleId?: string;
+  name?: string;
+  role: "user" | "teacher" | "student" | "admin";
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -21,8 +21,10 @@ class User
 {
   public id!: string;
   public email!: string;
+  public name!: string;
   public password!: string;
-  public role!: "user" | "teacher" | "student" | "admin"; 
+  public googleId!: string;
+  public role!: "user" | "teacher" | "student" | "admin";
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -43,10 +45,12 @@ User.init(
         isEmail: true,
       },
     },
+    name: { type: DataTypes.STRING, allowNull: true, defaultValue: "" },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    googleId: { type: DataTypes.STRING, allowNull: true, defaultValue: "" },
     role: {
       type: DataTypes.ENUM("user", "teacher", "student", "admin"),
       allowNull: false,

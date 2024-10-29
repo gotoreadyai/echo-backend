@@ -68,6 +68,24 @@ export const createOne =
     }
   };
 
+  export const createBulk =
+  <T extends Model>(model: ModelStatic<T>) =>
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const userReq = req as RequestWithUser;
+      const itemsWithOwnerId = req.body.map((item: any) => ({
+        ...item,
+        ownerId: userReq.user.id,
+      }));
+
+      const newItems = await model.bulkCreate(itemsWithOwnerId);
+      res.status(201).json(newItems);
+    } catch (err) {
+      next(err);
+    }
+  };
+
+
 export const updateOne =
   <T extends Model>(model: ModelStatic<T>, modelName: string) =>
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {

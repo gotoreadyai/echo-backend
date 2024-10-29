@@ -5,7 +5,12 @@ import User from "./user";
 interface CallingFunctionAttributes {
   id: string;
   title: string;
-  function: Record<string, any>;
+  slug: string;
+  description: string;
+  response: Record<string, any>;
+  parameters: Record<string, any>;
+  systemMessage: string;
+  userMessage: string;
   plugin: string;
   ownerId: string;
   createdAt?: Date;
@@ -24,7 +29,12 @@ class CallingFunction
 {
   public id!: string;
   public title!: string;
-  public function!: Record<string, any>;
+  public description!: string;
+  public slug!: string;
+  public response!: Record<string, any>;
+  public parameters!: Record<string, any>;
+  public systemMessage!: string;
+  public userMessage!: string;
   public plugin!:string;
   public ownerId!: string;
   public readonly createdAt!: Date;
@@ -42,10 +52,29 @@ CallingFunction.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    function: {
+    slug: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    description: {
+      type: DataTypes.STRING,
+      
+    },
+    response: {
       type: DataTypes.JSONB,
       defaultValue: {},
       allowNull: false,
+    },
+    parameters: {
+      type: DataTypes.JSONB,
+      defaultValue: {},
+      allowNull: false,
+    },
+    systemMessage: {
+      type: DataTypes.STRING,
+    },
+    userMessage: {
+      type: DataTypes.STRING,
     },
     plugin: {
       type: DataTypes.STRING,
