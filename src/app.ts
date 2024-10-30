@@ -14,7 +14,6 @@ import { listRoutes } from "./utils/listRotues";
 import { saveFiles } from "./controllers/seedFileController";
 
 /* #PLUGINS IMPORTS */
-import { printMemoryUsage } from "./utils/memoryUsage";
 import _JWTauth from "./plugins/_JWTauth/Routes";
 import openAI from "./plugins/openAI/Routes";
 import _GoogleAuth from "./plugins/_GoogleAuth/Routes";
@@ -49,7 +48,7 @@ app.use(schoolDazeAI);
 
 
 listRoutes(app);
-printMemoryUsage();
+
 
 // Tutaj dodajesz "catch-all" dla nieistniejących tras
 app.use((req, res, next) => {
