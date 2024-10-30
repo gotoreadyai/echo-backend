@@ -87,10 +87,16 @@ npx sequelize db:seed:undo
 # to update frontend schema
 npm run generate:schema
 
+# prepare local hosts:
+sudo nano /etc/hosts
+
 ## Author
 
 - **Last Name:** Durtan
 - **Email:** dadmor@gmail.com
 
 Got questions? Email me!
+
+
+
 
