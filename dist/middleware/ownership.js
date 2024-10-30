@@ -21,6 +21,7 @@ const verifyOwnership = (model) => {
                 return res.status(404).json({ error: `${model.name} not found` });
             }
             if (userRole === 'admin') {
+                // Admin users have access to all resources
                 return next();
             }
             const ownerId = resource.ownerId;

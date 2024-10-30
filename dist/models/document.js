@@ -44,6 +44,10 @@ Document.init({
         defaultValue: {},
         allowNull: false,
     },
+    plugin: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+    },
     workspaceId: {
         type: sequelize_1.DataTypes.UUID,
         allowNull: false,

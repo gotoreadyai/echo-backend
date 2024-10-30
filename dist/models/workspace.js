@@ -39,6 +39,10 @@ Workspace.init({
         defaultValue: {},
         allowNull: false,
     },
+    plugin: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+    },
     ownerId: {
         type: sequelize_1.DataTypes.UUID,
         allowNull: false,

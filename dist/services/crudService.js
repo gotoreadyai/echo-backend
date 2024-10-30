@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.remove = exports.update = exports.create = exports.findOne = exports.findAll = void 0;
+exports.remove = exports.update = exports.createBulk = exports.create = exports.findOne = exports.findAll = void 0;
 const findAll = (model, options, page, pageSize) => __awaiter(void 0, void 0, void 0, function* () {
     const limit = pageSize || 10; // Domyślny rozmiar strony
     const offset = page ? (page - 1) * limit : 0;
@@ -36,6 +36,11 @@ const create = (model, data) => __awaiter(void 0, void 0, void 0, function* () {
     return (yield model.create(data));
 });
 exports.create = create;
+const createBulk = (model, data) => __awaiter(void 0, void 0, void 0, function* () {
+    const itemsWithOwnerId = data.map(item => (Object.assign(Object.assign({}, item), { ownerId: item.ownerId })));
+    return yield model.bulkCreate(itemsWithOwnerId);
+});
+exports.createBulk = createBulk;
 const update = (model, id, data) => __awaiter(void 0, void 0, void 0, function* () {
     const options = {
         where: { id },

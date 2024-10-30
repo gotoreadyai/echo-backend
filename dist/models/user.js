@@ -21,10 +21,12 @@ User.init({
             isEmail: true,
         },
     },
+    name: { type: sequelize_1.DataTypes.STRING, allowNull: true, defaultValue: "" },
     password: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
+    googleId: { type: sequelize_1.DataTypes.STRING, allowNull: true, defaultValue: "" },
     role: {
         type: sequelize_1.DataTypes.ENUM("user", "teacher", "student", "admin"),
         allowNull: false,

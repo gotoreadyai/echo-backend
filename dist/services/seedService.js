@@ -16,16 +16,32 @@ exports.saveJsonToFile = saveJsonToFile;
 const promises_1 = __importDefault(require("fs/promises"));
 const path_1 = __importDefault(require("path"));
 /**
- * Zapisuje dane JSON do pliku na serwerze.
- * @param {string} directory - Katalog, w którym ma zostać zapisany plik.
- * @param {string} name - Nazwa pliku bez rozszerzenia.
- * @param {Object} data - Dane do zapisania w formacie JSON.
- * @returns {Promise<string>} Ścieżka do utworzonego pliku.
+ * Zapisuje dane w formacie JSON do pliku na serwerze. Jeśli content jest przekazany, pobiera dane z pliku w katalogu seedSlug.
+ * @param {string} directory - Ścieżka katalogu, w którym plik zostanie zapisany.
+ * @param {string} name - Nazwa pliku (bez rozszerzenia).
+ * @param {Object} data - Obiekt danych, które mają zostać zapisane w formacie JSON.
+ * @param {string} [plugin] - Opcjonalna nazwa pluginu do pobrania contentu z pliku.
+ * @param {boolean} [useContent] - Jeśli true, dane zostaną pobrane z pliku seedSlug/_init.json.
+ * @returns {Promise<string>} - Obietnica zwracająca ścieżkę do utworzonego pliku.
+ * @throws {Error} - Błąd, jeśli brakuje nazwy pliku, danych lub zapis się nie powiedzie.
  */
-function saveJsonToFile(directory, name, data) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (!name || !data) {
-            throw new Error("Brakuje nazwy pliku lub danych.");
+function saveJsonToFile(directory_1, name_1, data_1, plugin_1) {
+    return __awaiter(this, arguments, void 0, function* (directory, name, data, plugin, useContent = false) {
+        if (!name) {
+            throw new Error("Brakuje nazwy pliku.");
+        }
+        let finalData = data;
+        // Jeśli useContent jest true, pobierz dane z pliku _init.json
+        if (useContent && plugin) {
+            const contentPath = path_1.default.join("src", "plugins", plugin, "seedSlug", "_init.json");
+            try {
+                const content = yield promises_1.default.readFile(contentPath, "utf8");
+                finalData = JSON.parse(content);
+            }
+            catch (error) {
+                console.error(`Błąd podczas pobierania contentu z ${contentPath}:`, error);
+                throw new Error("Nie udało się pobrać contentu z pliku.");
+            }
         }
         // Zabezpieczenie nazwy pliku przed atakami path traversal
         const safeName = path_1.default.basename(name);
@@ -35,7 +51,7 @@ function saveJsonToFile(directory, name, data) {
             // Upewnij się, że katalog istnieje
             yield promises_1.default.mkdir(path_1.default.dirname(filePath), { recursive: true });
             // Zapisz dane do pliku w formacie JSON
-            yield promises_1.default.writeFile(filePath, JSON.stringify(data, null, 2), "utf8");
+            yield promises_1.default.writeFile(filePath, JSON.stringify(finalData, null, 2), "utf8");
             return filePath;
         }
         catch (error) {

@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteOne = exports.updateOne = exports.createOne = exports.getOne = exports.getAll = void 0;
+exports.deleteOne = exports.updateOne = exports.createBulk = exports.createOne = exports.getOne = exports.getAll = void 0;
 const crudService = __importStar(require("../services/crudService"));
 const getAll = (model, modelName) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -85,6 +85,18 @@ const createOne = (model) => (req, res, next) => __awaiter(void 0, void 0, void 
     }
 });
 exports.createOne = createOne;
+const createBulk = (model) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userReq = req;
+        const itemsWithOwnerId = req.body.map((item) => (Object.assign(Object.assign({}, item), { ownerId: userReq.user.id })));
+        const newItems = yield model.bulkCreate(itemsWithOwnerId);
+        res.status(201).json(newItems);
+    }
+    catch (err) {
+        next(err);
+    }
+});
+exports.createBulk = createBulk;
 const updateOne = (model, modelName) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const [updatedCount, updatedItems] = yield crudService.update(model, req.params.id, req.body);

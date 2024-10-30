@@ -39,6 +39,7 @@ const createCrudRoutes = (model, modelName) => {
     router.post(`/${modelName}`, verifyToken_1.verifyToken, crudController.createOne(model));
     router.put(`/${modelName}/:id`, verifyToken_1.verifyToken, (0, ownership_1.verifyOwnership)(model), crudController.updateOne(model, modelName));
     router.delete(`/${modelName}/:id`, verifyToken_1.verifyToken, (0, ownership_1.verifyOwnership)(model), crudController.deleteOne(model, modelName));
+    router.put(`/${pluralizedName}/bulk/`, verifyToken_1.verifyToken, (0, ownership_1.verifyOwnership)(model), crudController.createBulk(model));
     return router;
 };
 exports.default = createCrudRoutes;
