@@ -12,7 +12,6 @@ const errorHandler_1 = require("./middleware/errorHandler");
 const listRotues_1 = require("./utils/listRotues");
 const seedFileController_1 = require("./controllers/seedFileController");
 /* #PLUGINS IMPORTS */
-const memoryUsage_1 = require("./utils/memoryUsage");
 const Routes_1 = __importDefault(require("./plugins/_JWTauth/Routes"));
 const Routes_2 = __importDefault(require("./plugins/openAI/Routes"));
 const Routes_3 = __importDefault(require("./plugins/_GoogleAuth/Routes"));
@@ -42,7 +41,6 @@ app.use(Routes_5.default);
 app.use(Routes_6.default);
 /* !#PLUGINS */
 (0, listRotues_1.listRoutes)(app);
-(0, memoryUsage_1.printMemoryUsage)();
 // Tutaj dodajesz "catch-all" dla nieistniejących tras
 app.use((req, res, next) => {
     const error = new Error(`Cannot ${req.method} ${req.originalUrl}`);
