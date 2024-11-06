@@ -13,9 +13,11 @@
     "generate:crud:seeders": "ts-node echo-cli/generateSeeders.ts"
   },
   "dependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/express": "^4.17.21",
     "@types/node": "^22.1.0",
     "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "chalk": "^5.3.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",

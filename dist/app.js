@@ -51,7 +51,7 @@ app.use((req, res, next) => {
 app.use(errorHandler_1.errorHandler);
 const PORT = process.env.PORT || 3000;
 db_1.default
-    .sync()
+    .sync({ force: true })
     .then(() => {
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
