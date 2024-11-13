@@ -14,12 +14,12 @@ import { listRoutes } from "./utils/listRotues";
 import { saveFiles } from "./controllers/seedFileController";
 
 /* #PLUGINS IMPORTS */
-import _JWTauth from "./plugins/_JWTauth/Routes";
-import openAI from "./plugins/openAI/Routes";
 import _GoogleAuth from "./plugins/_GoogleAuth/Routes";
+import _JWTauth from "./plugins/_JWTauth/Routes";
 import schoolDaze from "./plugins/schoolDaze/Routes";
 import schoolDazeContent from "./plugins/schoolDazeContent/Routes";
 import schoolDazeAI from "./plugins/schoolDazeAI/Routes";
+import openAI from "./plugins/openAI/Routes";
 /* !#PLUGINS IMPORTS */
 
 const app = express();
@@ -38,12 +38,12 @@ app.use(createSlugRoutes(Document, "document"));
 app.post("/seed", saveFiles);
 
 /* #PLUGINS */
-app.use(_JWTauth);
-app.use(openAI);
 app.use(_GoogleAuth);
+app.use(_JWTauth);
 app.use(schoolDaze);
 app.use(schoolDazeContent);
 app.use(schoolDazeAI);
+app.use(openAI);
 /* !#PLUGINS */
 
 listRoutes(app);

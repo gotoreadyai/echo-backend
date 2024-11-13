@@ -4,7 +4,6 @@ const records = [];
 const plugin = "";
 
 const recordFormatter = (item, ownerId) => {
-  console.log("ownerId", ownerId);
   return {
     id: uuidv4(),
     title: item.data.title,

@@ -22,17 +22,13 @@ export const saveFiles = async (
     });
 
     if (!documents.length) {
-      return res
-        .status(404)
-        .json({ 
-          error: `No documents found for the provided plugin: ${plugin}. Please ensure the plugin name is correct.` 
-        });
+      return res.status(404).json({
+        error: `No documents found for the provided plugin: ${plugin}. Please ensure the plugin name is correct.`,
+      });
     }
 
     for (const document of documents) {
       const fileName = `${document.slug}`;
-      console.log(document,fileName);
-      
       await saveJsonToFile(
         `./incommingSeeds/${plugin}`,
         fileName,
@@ -40,11 +36,9 @@ export const saveFiles = async (
       );
     }
 
-    return res
-      .status(200)
-      .json({ 
-        message: `Successfully retrieved and saved ${documents.length} documents for the plugin: ${plugin}.` 
-      });
+    return res.status(200).json({
+      message: `Successfully retrieved and saved ${documents.length} documents for the plugin: ${plugin}.`,
+    });
   } catch (error) {
     next(error);
   }

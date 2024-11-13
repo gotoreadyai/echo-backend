@@ -54,7 +54,6 @@ CallingFunction.init(
     },
     slug: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     description: {
       type: DataTypes.STRING,
@@ -63,12 +62,10 @@ CallingFunction.init(
     response: {
       type: DataTypes.JSONB,
       defaultValue: {},
-      allowNull: false,
     },
     parameters: {
       type: DataTypes.JSONB,
       defaultValue: {},
-      allowNull: false,
     },
     systemMessage: {
       type: DataTypes.STRING,

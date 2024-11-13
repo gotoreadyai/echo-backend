@@ -75,5 +75,4 @@ Workspace.init(
 
 // Relacja z modelem User
 Workspace.belongsTo(User, { foreignKey: "ownerId", as: "owner" });
-
 export default Workspace;

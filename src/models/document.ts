@@ -57,7 +57,6 @@ Document.init(
     },
     plugin: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     workspaceId: {
       type: DataTypes.UUID,
