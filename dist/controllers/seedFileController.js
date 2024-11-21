@@ -29,21 +29,16 @@ const saveFiles = (req, res, next) => __awaiter(void 0, void 0, void 0, function
             where: { plugin: plugin },
         });
         if (!documents.length) {
-            return res
-                .status(404)
-                .json({
-                error: `No documents found for the provided plugin: ${plugin}. Please ensure the plugin name is correct.`
+            return res.status(404).json({
+                error: `No documents found for the provided plugin: ${plugin}. Please ensure the plugin name is correct.`,
             });
         }
         for (const document of documents) {
             const fileName = `${document.slug}`;
-            console.log(document, fileName);
             yield (0, seedService_1.saveJsonToFile)(`./incommingSeeds/${plugin}`, fileName, document.content);
         }
-        return res
-            .status(200)
-            .json({
-            message: `Successfully retrieved and saved ${documents.length} documents for the plugin: ${plugin}.`
+        return res.status(200).json({
+            message: `Successfully retrieved and saved ${documents.length} documents for the plugin: ${plugin}.`,
         });
     }
     catch (error) {

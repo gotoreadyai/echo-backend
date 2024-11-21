@@ -53,6 +53,15 @@ const fileService = {
       console.error(`Error writing file: ${error.message}`);
     }
   },
+
+  getDirectories: (target) => {
+    const items = fs.readdirSync(target, { withFileTypes: true });
+    const directories = items
+      .filter((item) => item.isDirectory())
+      .map((dir) => dir.name);
+      return directories
+ 
+  }
 };
 
 module.exports = fileService;

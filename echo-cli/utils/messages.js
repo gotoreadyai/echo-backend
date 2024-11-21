@@ -44,14 +44,14 @@ const msg = {
   isRute: (hasRoutesFile) => {
     console.log(
       `${hasRoutesFile ? msg.color.green : msg.color.orange}Plik Routes.js ${
-        hasRoutesFile ? "istnieje" : "nie istnieje"
-      } w katalogu pluginu.${msg.color.reset}`
+        hasRoutesFile ? "istnieje (realizuję)" : "nie istnieje (pomijam)"
+      } w katalogu pluginu. ${msg.color.reset}`
     );
   },
   isModel: (hasModels) => {
     console.log(
       `${hasModels ? msg.color.green : msg.color.orange}Plik models/index.ts ${
-        hasModels ? "istnieje" : "nie istnieje"
+        hasModels ? "istnieje (realizuję)" : "nie istnieje (pomijam)"
       } w katalogu pluginu.${msg.color.reset}`
     );
   },
@@ -60,7 +60,7 @@ const msg = {
       `${
         hasModels ? msg.color.green : msg.color.orange
       }Plik seedSlug/_init.json ${
-        hasModels ? "istnieje" : "nie istnieje"
+        hasModels ? "istnieje (tworzę)" : "nie istnieje (pomijam)"
       } w katalogu pluginu.${msg.color.reset}`
     );
   },

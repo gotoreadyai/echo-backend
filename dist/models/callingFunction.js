@@ -20,7 +20,6 @@ CallingFunction.init({
     },
     slug: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
     },
     description: {
         type: sequelize_1.DataTypes.STRING,
@@ -28,12 +27,10 @@ CallingFunction.init({
     response: {
         type: sequelize_1.DataTypes.JSONB,
         defaultValue: {},
-        allowNull: false,
     },
     parameters: {
         type: sequelize_1.DataTypes.JSONB,
         defaultValue: {},
-        allowNull: false,
     },
     systemMessage: {
         type: sequelize_1.DataTypes.STRING,

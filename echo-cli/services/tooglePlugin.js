@@ -32,6 +32,11 @@ const toggleService = {
     const activeFilePath = path.join(folderPath, "active");
     const pluginName = path.basename(folderPath);
 
+    if (!fs.existsSync(folderPath)) {
+      console.error(`Plugin folder not found: ${folderPath}`);
+      return;
+    }
+
     // Activate or deactivate the 'active' file
     if (isSelected) {
       fs.writeFileSync(activeFilePath, ""); // Create an empty 'active' file.
@@ -78,7 +83,7 @@ const toggleService = {
     // Save the updated content to plugins.ts
     try {
       fs.writeFileSync(pluginsTsPath, newFileContent, "utf8");
-      console.log(`plugins.ts has been updated:\n${newFileContent}`);
+      console.log(`┠ Frontend config file, plugins.ts has been updated:\n┗ ${pluginsTsPath}`);
     } catch (err) {
       console.error("Error saving plugins.ts:", err);
     }

@@ -18,7 +18,7 @@ async function mainMenu() {
   try {
     switch (action) {
       case "about":
-        execSync('echo "This is the CLI tool for managing plugins."', {
+        execSync('echo "┏\n┃ SmartInteractive CLI v.0.0.1\n╹" ', {
           stdio: "inherit",
         });
         break;

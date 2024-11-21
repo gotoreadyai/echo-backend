@@ -13,11 +13,9 @@ const listRotues_1 = require("./utils/listRotues");
 const seedFileController_1 = require("./controllers/seedFileController");
 /* #PLUGINS IMPORTS */
 const Routes_1 = __importDefault(require("./plugins/_JWTauth/Routes"));
-const Routes_2 = __importDefault(require("./plugins/openAI/Routes"));
-const Routes_3 = __importDefault(require("./plugins/_GoogleAuth/Routes"));
+const Routes_2 = __importDefault(require("./plugins/_GoogleAuth/Routes"));
+const Routes_3 = __importDefault(require("./plugins/openAI/Routes"));
 const Routes_4 = __importDefault(require("./plugins/schoolDaze/Routes"));
-const Routes_5 = __importDefault(require("./plugins/schoolDazeContent/Routes"));
-const Routes_6 = __importDefault(require("./plugins/schoolDazeAI/Routes"));
 /* !#PLUGINS IMPORTS */
 const app = (0, express_1.default)();
 const cors = require("cors");
@@ -37,8 +35,6 @@ app.use(Routes_1.default);
 app.use(Routes_2.default);
 app.use(Routes_3.default);
 app.use(Routes_4.default);
-app.use(Routes_5.default);
-app.use(Routes_6.default);
 /* !#PLUGINS */
 (0, listRotues_1.listRoutes)(app);
 // Tutaj dodajesz "catch-all" dla nieistniejących tras
@@ -51,7 +47,7 @@ app.use((req, res, next) => {
 app.use(errorHandler_1.errorHandler);
 const PORT = process.env.PORT || 3000;
 db_1.default
-    .sync({ force: true })
+    .sync()
     .then(() => {
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
